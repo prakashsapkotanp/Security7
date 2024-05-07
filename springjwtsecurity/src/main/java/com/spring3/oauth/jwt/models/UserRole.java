@@ -1,24 +1,27 @@
 package com.spring3.oauth.jwt.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 
 @Entity
 @Data
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "ROLES")
+@Table(name = "USER_ROLES")
 public class UserRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
-    private long id;
-    private String name;
+    @Column(name = "ROLE_ID")
+    private Long id;
+
+    @Column(name = "ROLE_NAME")
+    private String roleName;
+
+    // Constructor with roleName parameter
+    public UserRole(String roleName) {
+        this.roleName = roleName;
+    }
 
 }
