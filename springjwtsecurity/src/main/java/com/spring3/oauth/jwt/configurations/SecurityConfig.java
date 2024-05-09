@@ -33,10 +33,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf().disable()
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/save", "/api/v1/user/signup", "/api/v1/refreshToken").permitAll()
+                .requestMatchers("/api/v1/user/login", "/api/v1/user/signup", "/api/v1/refreshToken").permitAll()
                 .and()
                 .authorizeHttpRequests().requestMatchers("/api/v1/**")
                 .authenticated()

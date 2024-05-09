@@ -111,5 +111,21 @@ public class UserServiceImpl implements UserService {
 
         return userLoginResponse;
     }
+    @Override
+    public UserLoginResponse registerUser(SignUpRequestDTO signUpRequestDTO, UserRole userRole) {
+        // Create a Set containing the user's role
+        Set<UserRole> roles = new HashSet<>();
+        roles.add(userRole);
+
+        // Create the user with the associated role
+        UserLoginRequest userLoginRequest = UserLoginRequest.builder()
+                .username(signUpRequestDTO.getUsername())
+                .password(signUpRequestDTO.getPassword())
+                .role(userRole)
+                .build();
+
+        // Save the user
+        return saveUser(userLoginRequest);
+    }
 
 }

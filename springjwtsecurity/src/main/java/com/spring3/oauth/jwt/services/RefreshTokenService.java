@@ -10,7 +10,6 @@ import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
-
 @Service
 public class RefreshTokenService {
 
@@ -29,7 +28,18 @@ public class RefreshTokenService {
         return refreshTokenRepository.save(refreshToken);
     }
 
-
+    public RefreshToken generateUniqueRefreshToken(String username) {
+        Optional<RefreshToken> existingToken = refreshTokenRepository.findByUserInfoUsername(username);
+        if (existingToken.isPresent()) {
+            // If a token already exists for the user, update its expiration date and return it
+            RefreshToken token = existingToken.get();
+            token.setExpiryDate(Instant.now().plusMillis(600000));
+            return refreshTokenRepository.save(token);
+        } else {
+            // If no token exists, create a new one
+            return createRefreshToken(username);
+        }
+    }
 
     public Optional<RefreshToken> findByToken(String token){
         return refreshTokenRepository.findByToken(token);
@@ -41,7 +51,5 @@ public class RefreshTokenService {
             throw new RuntimeException(token.getToken() + " Refresh token is expired. Please make a new login..!");
         }
         return token;
-
     }
-
 }

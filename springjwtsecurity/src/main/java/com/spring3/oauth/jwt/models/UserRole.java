@@ -20,6 +20,7 @@ public class UserRole {
     private String roleName;
 
     // Constructor with roleName parameter
+
     public UserRole(String roleName) {
         this.roleName = roleName;
     }

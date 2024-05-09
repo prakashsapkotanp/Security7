@@ -15,6 +15,6 @@ public class UserLoginRequest {
     private Long id;
     private String username;
     private String password;
-
+    private UserRole role;
 
 }
