@@ -5,26 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7bba4686-5003-44c2-b66d-79176773fd1e" name="Changes" comment="signup added and token generated">
+      <change afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/dtos/ErrorResponseDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/19e08be0-6170-49fc-b643-d89c8b719e87.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/19e08be0-6170-49fc-b643-d89c8b719e87.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/configurations/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/configurations/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/controllers/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/dtos/UserLoginRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/dtos/UserLoginRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/UserInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/UserInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/UserRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/UserRole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/RefreshTokenRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/RefreshTokenRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/UserRoleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/UserRoleRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/RefreshTokenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/RefreshTokenService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/UserRoleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/UserRoleService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/configurations/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/configurations/SecurityConfig.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/controllers/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/controllers/UserController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/dtos/UserLoginRequest$UserLoginRequestBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/dtos/UserLoginRequest$UserLoginRequestBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/dtos/UserLoginRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/dtos/UserLoginRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/UserRole.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/UserRole.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/repositories/UserRoleRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/repositories/UserRoleRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/services/RefreshTokenService.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/services/RefreshTokenService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/services/UserRoleService.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/services/UserRoleService.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,6 +98,7 @@
       <workItem from="1715147634201" duration="5486000" />
       <workItem from="1715167376980" duration="4325000" />
       <workItem from="1715240367279" duration="6346000" />
+      <workItem from="1715247868600" duration="319000" />
     </task>
     <task id="LOCAL-00001" summary="signup added and token generated">
       <option name="closed" value="true" />

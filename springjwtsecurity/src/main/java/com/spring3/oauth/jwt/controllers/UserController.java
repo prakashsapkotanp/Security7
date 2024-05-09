@@ -75,6 +75,32 @@ public class UserController {
         return "Welcome";
     }
 
+
+    /*
+    @PostMapping("/login")
+    public ResponseEntity<?> AuthenticateAndGetToken(@RequestBody AuthRequestDTO authRequestDTO) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequestDTO.getUsername(), authRequestDTO.getPassword()));
+            if (authentication.isAuthenticated()) {
+                RefreshToken refreshToken = refreshTokenService.createRefreshToken(authRequestDTO.getUsername());
+                String accessToken = jwtService.GenerateToken(authRequestDTO.getUsername());
+                JwtResponseDTO jwtResponseDTO = JwtResponseDTO.builder()
+                        .accessToken(accessToken)
+                        .token(refreshToken.getToken())
+                        .build();
+                return ResponseEntity.ok(jwtResponseDTO);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(HttpStatus.UNAUTHORIZED.value(), "Invalid username or password"));
+            }
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(HttpStatus.UNAUTHORIZED.value(), "Invalid username or password"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        }
+    }
+*/
+
+
     @PostMapping("/login")
     public ResponseEntity<?> authenticateAndGetToken(@RequestBody AuthRequestDTO authRequestDTO) {
         try {
@@ -112,6 +138,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
         }
     }
+
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody SignUpRequestDTO signUpRequestDTO) {
