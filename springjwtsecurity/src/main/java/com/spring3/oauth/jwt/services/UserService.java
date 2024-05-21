@@ -17,6 +17,8 @@ public interface UserService {
 
     boolean existsByUsername(String username);
 
+    long countUsers();
+
     UserLoginResponse registerUser(SignUpRequestDTO signUpRequestDTO);
     UserLoginResponse registerUser(SignUpRequestDTO signUpRequestDTO, UserRole userRole);
 }

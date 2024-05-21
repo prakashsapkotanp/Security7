@@ -139,7 +139,7 @@ public class UserController {
         }
     }
 
-
+/*
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody SignUpRequestDTO signUpRequestDTO) {
         try {
@@ -176,6 +176,46 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
         }
     }
+*/
+@PostMapping("/signup")
+public ResponseEntity<?> signUp(@RequestBody SignUpRequestDTO signUpRequestDTO) {
+    try {
+        // Check if the username already exists
+        if (userService.existsByUsername(signUpRequestDTO.getUsername())) {
+            return ResponseEntity.badRequest().body(new ErrorResponseDTO(HttpStatus.BAD_REQUEST.value(), "Username already exists"));
+        }
+
+        // Check if it's the first registration
+        boolean isFirstRegistration = userService.countUsers() == 0;
+
+        // Retrieve or create default role "user" or "admin" based on isFirstRegistration
+        UserRole userRole = isFirstRegistration ? userRoleService.findByRoleName("admin") : userRoleService.findByRoleName("user");
+        if (userRole == null) {
+            // If default role not found, create it
+            userRole = new UserRole(isFirstRegistration ? "admin" : "user");
+            userRole = userRoleService.saveUserRole(userRole); // Save the role
+        }
+
+        // Save the user with the associated role
+        UserLoginResponse userLoginResponse = userService.registerUser(signUpRequestDTO, userRole);
+
+        // Generate JWT token
+        String accessToken = jwtService.GenerateToken(signUpRequestDTO.getUsername());
+
+        // Create a refresh token
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(signUpRequestDTO.getUsername());
+
+        // Build and return JWT response
+        JwtResponseDTO jwtResponseDTO = JwtResponseDTO.builder()
+                .accessToken(accessToken)
+                .token(refreshToken.getToken())
+                .build();
+
+        return ResponseEntity.ok(jwtResponseDTO);
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+    }
+}
 
 
 

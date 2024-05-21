@@ -4,6 +4,7 @@ import com.spring3.oauth.jwt.dtos.*;
 import com.spring3.oauth.jwt.models.UserInfo;
 import com.spring3.oauth.jwt.models.UserRole;
 import com.spring3.oauth.jwt.repositories.UserRepository;
+import com.spring3.oauth.jwt.repositories.UserRoleRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserRoleRepository roleRepository;
 
     ModelMapper modelMapper = new ModelMapper();
 
@@ -41,6 +44,7 @@ public class UserServiceImpl implements UserService {
         String encodedPassword = encoder.encode(rawPassword);
 
         UserInfo user = modelMapper.map(userLoginRequest, UserInfo.class);
+        user.getRoles().add(roleRepository.findByRoleName("user"));
         user.setPassword(encodedPassword);
         if(userLoginRequest.getId() != null){
             UserInfo oldUser = userRepository.findFirstById(userLoginRequest.getId());
@@ -126,6 +130,10 @@ public class UserServiceImpl implements UserService {
 
         // Save the user
         return saveUser(userLoginRequest);
+    }
+    @Override
+    public long countUsers() {
+        return userRepository.count();
     }
 
 }

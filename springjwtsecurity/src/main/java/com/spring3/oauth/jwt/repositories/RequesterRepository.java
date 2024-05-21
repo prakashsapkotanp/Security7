@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.spring3.oauth.jwt.models.RequesterInfo;
 
 @Repository
-public interface RequesterRepository extends JpaRepository<RequesterInfo,Long> {
+public interface RequesterRepository extends JpaRepository<RequesterInfo, Long> {
     Optional<RequesterInfo> findById(Long id);
 
     List<RequesterInfo> findByBloodGroup(String bloodGroup);
