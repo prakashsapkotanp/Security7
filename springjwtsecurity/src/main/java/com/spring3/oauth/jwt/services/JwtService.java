@@ -1,5 +1,6 @@
 package com.spring3.oauth.jwt.services;
 
+import com.spring3.oauth.jwt.repositories.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -11,11 +12,14 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
 @Component
 public class JwtService {
+    public UserRepository userRepository;
+    public UserRoleService userRoleService;
 
     public static final String SECRET = "357638792F423F4428472B4B6250655368566D597133743677397A2443264629";
 
@@ -52,11 +56,13 @@ public class JwtService {
 
 
 
-    public String GenerateToken(String username){
+    public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
+        Long userId = userRepository.findByUsername(username).getId();
+        List<String> roles = userRoleService.getRolesByUserId(userId);
+        claims.put("roles", roles);
         return createToken(claims, username);
     }
-
 
 
     private String createToken(Map<String, Object> claims, String username) {

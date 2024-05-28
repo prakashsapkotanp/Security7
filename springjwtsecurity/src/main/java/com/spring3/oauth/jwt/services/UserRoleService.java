@@ -2,9 +2,8 @@ package com.spring3.oauth.jwt.services;
 
 import java.util.List;
 import java.util.Optional;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.spring3.oauth.jwt.models.UserRole;
 import com.spring3.oauth.jwt.repositories.UserRoleRepository;
 
@@ -12,6 +11,7 @@ import com.spring3.oauth.jwt.repositories.UserRoleRepository;
 public class UserRoleService {
     private final UserRoleRepository userRoleRepository;
 
+    @Autowired
     public UserRoleService(UserRoleRepository userRoleRepository) {
         this.userRoleRepository = userRoleRepository;
     }
@@ -34,5 +34,9 @@ public class UserRoleService {
 
     public void deleteUserRole(Long id) {
         userRoleRepository.deleteById(id);
+    }
+
+    public List<String> getRolesByUserId(Long userId) {
+        return userRoleRepository.findRoleNamesByUserId(userId);
     }
 }

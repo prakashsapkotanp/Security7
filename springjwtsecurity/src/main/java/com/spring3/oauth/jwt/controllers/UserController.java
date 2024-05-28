@@ -113,7 +113,7 @@ public class UserController {
                 RefreshToken refreshToken = refreshTokenService.generateUniqueRefreshToken(authRequestDTO.getUsername());
 
                 // Generate JWT token
-                String accessToken = jwtService.GenerateToken(authRequestDTO.getUsername());
+                String accessToken = jwtService.generateToken(authRequestDTO.getUsername());
 
                 // Build JWT response DTO
                 JwtResponseDTO jwtResponseDTO = JwtResponseDTO.builder()
@@ -160,7 +160,7 @@ public class UserController {
             UserLoginResponse userLoginResponse = userService.registerUser(signUpRequestDTO, userRole);
 
             // Generate JWT token
-            String accessToken = jwtService.GenerateToken(signUpRequestDTO.getUsername());
+            String accessToken = jwtService.generateToken(signUpRequestDTO.getUsername());
 
             // Create a refresh token
             RefreshToken refreshToken = refreshTokenService.createRefreshToken(signUpRequestDTO.getUsername());
@@ -186,7 +186,7 @@ public class UserController {
                     .map(refreshTokenService::verifyExpiration)
                     .map(RefreshToken::getUserInfo)
                     .map(userInfo -> {
-                        String accessToken = jwtService.GenerateToken(userInfo.getUsername());
+                        String accessToken = jwtService.generateToken(userInfo.getUsername());
                         JwtResponseDTO jwtResponseDTO = JwtResponseDTO.builder()
                                 .accessToken(accessToken)
                                 .token(refreshTokenRequestDTO.getToken()).build();

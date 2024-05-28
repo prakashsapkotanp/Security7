@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7bba4686-5003-44c2-b66d-79176773fd1e" name="Changes" comment="signup added and token generated">
-      <change afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/dtos/ErrorResponseDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/19e08be0-6170-49fc-b643-d89c8b719e87.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/19e08be0-6170-49fc-b643-d89c8b719e87.xml" afterDir="false" />
+    <list default="true" id="7bba4686-5003-44c2-b66d-79176773fd1e" name="Changes" comment="error response dto added">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/controllers/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/controllers/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/controllers/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/UserRoleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/UserRoleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/JwtService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/UserRoleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/UserRoleService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,11 +18,17 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="prakash-test" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
@@ -48,24 +53,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;Spring Boot.OauthJwtApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.OauthJwtApplication.executor": "Run",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="OauthJwtApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="oauth-jwt" />
@@ -128,6 +134,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="adjustment added" />
     <MESSAGE value="signup added and token generated" />
-    <option name="LAST_COMMIT_MESSAGE" value="signup added and token generated" />
+    <MESSAGE value="error response dto added" />
+    <option name="LAST_COMMIT_MESSAGE" value="error response dto added" />
   </component>
 </project>
