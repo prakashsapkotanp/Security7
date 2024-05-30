@@ -35,8 +35,4 @@ public class UserRoleService {
     public void deleteUserRole(Long id) {
         userRoleRepository.deleteById(id);
     }
-
-    public List<String> getRolesByUserId(Long userId) {
-        return userRoleRepository.findRoleNamesByUserId(userId);
-    }
 }

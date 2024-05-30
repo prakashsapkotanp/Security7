@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends RefreshableCRUDRepository<UserInfo, Long> {
 
    public UserInfo findByUsername(String username);
-   UserInfo findFirstById(Long id);
 
+   UserInfo findFirstById(Long id);
 
     boolean existsByUsername(String username);
 }
