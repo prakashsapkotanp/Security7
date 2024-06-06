@@ -22,32 +22,42 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
-    ModelMapper modelMapper = new ModelMapper();
+    @Autowired
+    private UserRoleService userRoleService; // Assuming you have a UserRoleService to manage roles
+
+    private ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public UserLoginResponse saveUser(UserLoginRequest userLoginRequest) {
-        if(userLoginRequest.getUsername() == null){
+        if (userLoginRequest.getUsername() == null) {
             throw new RuntimeException("Parameter username is not found in request..!!");
-        } else if(userLoginRequest.getPassword() == null){
+        } else if (userLoginRequest.getPassword() == null) {
             throw new RuntimeException("Parameter password is not found in request..!!");
         }
 
-        UserInfo savedUser = null;
-
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String rawPassword = userLoginRequest.getPassword();
-        String encodedPassword = encoder.encode(rawPassword);
+        String encodedPassword = encoder.encode(userLoginRequest.getPassword());
 
         UserInfo user = modelMapper.map(userLoginRequest, UserInfo.class);
         user.setPassword(encodedPassword);
-        if(userLoginRequest.getId() != null){
+        user.setRoles(new HashSet<>()); // Initialize roles
+
+        if (userLoginRequest.getRole() != null) {
+            UserRole userRole = userRoleService.findByRoleName(userLoginRequest.getRole().getRoleName());
+            if (userRole == null) {
+                userRole = userRoleService.save(new UserRole(userLoginRequest.getRole().getRoleName()));
+            }
+            user.getRoles().add(userRole);
+        }
+
+        UserInfo savedUser;
+        if (userLoginRequest.getId() != null) {
             UserInfo oldUser = userRepository.findFirstById(userLoginRequest.getId());
-            if(oldUser != null){
-                oldUser.setId(user.getId());
-                oldUser.setPassword(user.getPassword());
+            if (oldUser != null) {
                 oldUser.setUsername(user.getUsername());
+                oldUser.setPassword(user.getPassword());
                 oldUser.setRoles(user.getRoles());
 
                 savedUser = userRepository.save(oldUser);
@@ -58,9 +68,9 @@ public class UserServiceImpl implements UserService {
         } else {
             savedUser = userRepository.save(user);
         }
+
         userRepository.refresh(savedUser);
-        UserLoginResponse userLoginResponse = modelMapper.map(savedUser, UserLoginResponse.class);
-        return userLoginResponse;
+        return modelMapper.map(savedUser, UserLoginResponse.class);
     }
 
     @Override
@@ -69,16 +79,15 @@ public class UserServiceImpl implements UserService {
         UserDetails userDetail = (UserDetails) authentication.getPrincipal();
         String usernameFromAccessToken = userDetail.getUsername();
         UserInfo user = userRepository.findByUsername(usernameFromAccessToken);
-        UserLoginResponse userLoginResponse = modelMapper.map(user, UserLoginResponse.class);
-        return userLoginResponse;
+        return modelMapper.map(user, UserLoginResponse.class);
     }
 
     @Override
     public List<UserLoginResponse> getAllUser() {
         List<UserInfo> users = (List<UserInfo>) userRepository.findAll();
-        Type setOfDTOsType = new TypeToken<List<UserLoginResponse>>(){}.getType();
-        List<UserLoginResponse> userLoginRespons = modelMapper.map(users, setOfDTOsType);
-        return userLoginRespons;
+        Type setOfDTOsType = new TypeToken<List<UserLoginResponse>>() {
+        }.getType();
+        return modelMapper.map(users, setOfDTOsType);
     }
 
     @Override
@@ -95,37 +104,39 @@ public class UserServiceImpl implements UserService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String encodedPassword = encoder.encode(signUpRequestDTO.getPassword());
 
-        // Create a Set containing the default role "user"
         Set<UserRole> roles = new HashSet<>();
-        roles.add(new UserRole("user")); // Assuming UserRole constructor exists
+        UserRole defaultRole = userRoleService.findByRoleName("user");
+        if (defaultRole == null) {
+            defaultRole = userRoleService.save(new UserRole("user"));
+        }
+        roles.add(defaultRole);
 
         UserInfo newUser = UserInfo.builder()
                 .username(signUpRequestDTO.getUsername())
                 .password(encodedPassword)
-                .roles(roles) // Set roles
+                .roles(roles)
                 .build();
 
         UserInfo savedUser = userRepository.save(newUser);
-
-        UserLoginResponse userLoginResponse = modelMapper.map(savedUser, UserLoginResponse.class);
-
-        return userLoginResponse;
+        return modelMapper.map(savedUser, UserLoginResponse.class);
     }
+
     @Override
     public UserLoginResponse registerUser(SignUpRequestDTO signUpRequestDTO, UserRole userRole) {
-        // Create a Set containing the user's role
         Set<UserRole> roles = new HashSet<>();
-        roles.add(userRole);
+        UserRole role = userRoleService.findByRoleName(userRole.getRoleName());
+        if (role == null) {
+            role = userRoleService.save(userRole);
+        }
+        roles.add(role);
 
-        // Create the user with the associated role
-        UserLoginRequest userLoginRequest = UserLoginRequest.builder()
+        UserInfo newUser = UserInfo.builder()
                 .username(signUpRequestDTO.getUsername())
-                .password(signUpRequestDTO.getPassword())
-                .role(userRole)
+                .password(new BCryptPasswordEncoder().encode(signUpRequestDTO.getPassword()))
+                .roles(roles)
                 .build();
 
-        // Save the user
-        return saveUser(userLoginRequest);
+        UserInfo savedUser = userRepository.save(newUser);
+        return modelMapper.map(savedUser, UserLoginResponse.class);
     }
-
 }
