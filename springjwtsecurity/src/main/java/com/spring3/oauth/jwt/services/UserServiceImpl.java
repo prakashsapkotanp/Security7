@@ -25,16 +25,16 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private UserRoleService userRoleService; // Assuming you have a UserRoleService to manage roles
+    private UserRoleService userRoleService;
 
     private ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public UserLoginResponse saveUser(UserLoginRequest userLoginRequest) {
         if (userLoginRequest.getUsername() == null) {
-            throw new RuntimeException("Parameter username is not found in request..!!");
+            throw new RuntimeException("Parameter 'username' is not found in request.");
         } else if (userLoginRequest.getPassword() == null) {
-            throw new RuntimeException("Parameter password is not found in request..!!");
+            throw new RuntimeException("Parameter 'password' is not found in request.");
         }
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -42,12 +42,12 @@ public class UserServiceImpl implements UserService {
 
         UserInfo user = modelMapper.map(userLoginRequest, UserInfo.class);
         user.setPassword(encodedPassword);
-        user.setRoles(new HashSet<>()); // Initialize roles
+        user.setRoles(new HashSet<>());
 
         if (userLoginRequest.getRole() != null) {
-            UserRole userRole = userRoleService.findByRoleName(userLoginRequest.getRole().getRoleName());
+            UserRole userRole = userRoleService.findByRoleName("ROLE_" + userLoginRequest.getRole().getRoleName().toUpperCase());
             if (userRole == null) {
-                userRole = userRoleService.save(new UserRole(userLoginRequest.getRole().getRoleName()));
+                userRole = userRoleService.save(new UserRole("ROLE_" + userLoginRequest.getRole().getRoleName().toUpperCase()));
             }
             user.getRoles().add(userRole);
         }
@@ -61,7 +61,6 @@ public class UserServiceImpl implements UserService {
                 oldUser.setRoles(user.getRoles());
 
                 savedUser = userRepository.save(oldUser);
-                userRepository.refresh(savedUser);
             } else {
                 throw new RuntimeException("Can't find record with identifier: " + userLoginRequest.getId());
             }
@@ -85,8 +84,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserLoginResponse> getAllUser() {
         List<UserInfo> users = (List<UserInfo>) userRepository.findAll();
-        Type setOfDTOsType = new TypeToken<List<UserLoginResponse>>() {
-        }.getType();
+        Type setOfDTOsType = new TypeToken<List<UserLoginResponse>>() {}.getType();
         return modelMapper.map(users, setOfDTOsType);
     }
 
@@ -95,38 +93,49 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByUsername(username);
     }
 
-    @Override
-    public UserLoginResponse registerUser(SignUpRequestDTO signUpRequestDTO) {
-        if (existsByUsername(signUpRequestDTO.getUsername())) {
-            throw new RuntimeException("Username already exists");
-        }
-
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String encodedPassword = encoder.encode(signUpRequestDTO.getPassword());
-
-        Set<UserRole> roles = new HashSet<>();
-        UserRole defaultRole = userRoleService.findByRoleName("user");
-        if (defaultRole == null) {
-            defaultRole = userRoleService.save(new UserRole("user"));
-        }
-        roles.add(defaultRole);
-
-        UserInfo newUser = UserInfo.builder()
-                .username(signUpRequestDTO.getUsername())
-                .password(encodedPassword)
-                .roles(roles)
-                .build();
-
-        UserInfo savedUser = userRepository.save(newUser);
-        return modelMapper.map(savedUser, UserLoginResponse.class);
+@Override
+public UserLoginResponse registerUser(SignUpRequestDTO signUpRequestDTO) {
+    if (existsByUsername(signUpRequestDTO.getUsername())) {
+        throw new RuntimeException("Username already exists");
     }
 
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    String encodedPassword = encoder.encode(signUpRequestDTO.getPassword());
+
+    Set<UserRole> roles = new HashSet<>();
+
+    // Check if this is the first user
+    if (userRepository.count() == 0) {
+        // Make the first user an admin
+        UserRole adminRole = userRoleService.findByRoleName("ROLE_ADMIN");
+        if (adminRole == null) {
+            adminRole = userRoleService.save(new UserRole("ROLE_ADMIN"));
+        }
+        roles.add(adminRole);
+    } else {
+        // Make others as users
+        UserRole defaultRole = userRoleService.findByRoleName("ROLE_USER");
+        if (defaultRole == null) {
+            defaultRole = userRoleService.save(new UserRole("ROLE_USER"));
+        }
+        roles.add(defaultRole);
+    }
+
+    UserInfo newUser = UserInfo.builder()
+            .username(signUpRequestDTO.getUsername())
+            .password(encodedPassword)
+            .roles(roles)
+            .build();
+
+    UserInfo savedUser = userRepository.save(newUser);
+    return modelMapper.map(savedUser, UserLoginResponse.class);
+}
     @Override
     public UserLoginResponse registerUser(SignUpRequestDTO signUpRequestDTO, UserRole userRole) {
         Set<UserRole> roles = new HashSet<>();
-        UserRole role = userRoleService.findByRoleName(userRole.getRoleName());
+        UserRole role = userRoleService.findByRoleName("ROLE_" + userRole.getRoleName().toUpperCase());
         if (role == null) {
-            role = userRoleService.save(userRole);
+            role = userRoleService.save(new UserRole("ROLE_" + userRole.getRoleName().toUpperCase()));
         }
         roles.add(role);
 
@@ -138,5 +147,19 @@ public class UserServiceImpl implements UserService {
 
         UserInfo savedUser = userRepository.save(newUser);
         return modelMapper.map(savedUser, UserLoginResponse.class);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) {
+        UserInfo user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+        return org.springframework.security.core.userdetails.User.withUsername(user.getUsername())
+                .password(user.getPassword())
+                .authorities(user.getRoles().stream()
+                        .map(role ->  role.getRoleName().toUpperCase())
+                        .toArray(String[]::new))
+                .build();
     }
 }

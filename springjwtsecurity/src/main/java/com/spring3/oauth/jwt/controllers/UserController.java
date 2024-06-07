@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,45 +76,23 @@ public class UserController {
         return "Welcome";
     }
 
-
-    /*
-    @PostMapping("/login")
-    public ResponseEntity<?> AuthenticateAndGetToken(@RequestBody AuthRequestDTO authRequestDTO) {
-        try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequestDTO.getUsername(), authRequestDTO.getPassword()));
-            if (authentication.isAuthenticated()) {
-                RefreshToken refreshToken = refreshTokenService.createRefreshToken(authRequestDTO.getUsername());
-                String accessToken = jwtService.GenerateToken(authRequestDTO.getUsername());
-                JwtResponseDTO jwtResponseDTO = JwtResponseDTO.builder()
-                        .accessToken(accessToken)
-                        .token(refreshToken.getToken())
-                        .build();
-                return ResponseEntity.ok(jwtResponseDTO);
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(HttpStatus.UNAUTHORIZED.value(), "Invalid username or password"));
-            }
-        } catch (UsernameNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(HttpStatus.UNAUTHORIZED.value(), "Invalid username or password"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
-        }
-    }
-*/
-
-
     @PostMapping("/login")
     public ResponseEntity<?> authenticateAndGetToken(@RequestBody AuthRequestDTO authRequestDTO) {
         try {
             // Authenticate user
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequestDTO.getUsername(), authRequestDTO.getPassword()));
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authRequestDTO.getUsername(), authRequestDTO.getPassword()));
 
             // If authentication is successful
             if (authentication.isAuthenticated()) {
                 // Generate unique refresh token
                 RefreshToken refreshToken = refreshTokenService.generateUniqueRefreshToken(authRequestDTO.getUsername());
 
-                // Generate JWT token
-                String accessToken = jwtService.generateToken(authRequestDTO.getUsername());
+                // Generate JWT token with roles and username
+//                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//                String accessToken = jwtService.generateToken(userDetails);
+                UserDetails userDetails = userService.loadUserByUsername(authRequestDTO.getUsername());
+                String accessToken = jwtService.generateToken(userDetails);
 
                 // Build JWT response DTO
                 JwtResponseDTO jwtResponseDTO = JwtResponseDTO.builder()
@@ -140,6 +119,7 @@ public class UserController {
     }
 
 
+
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody SignUpRequestDTO signUpRequestDTO) {
         try {
@@ -148,19 +128,12 @@ public class UserController {
                 return ResponseEntity.badRequest().body(new ErrorResponseDTO(HttpStatus.BAD_REQUEST.value(), "Username already exists"));
             }
 
-            // Retrieve or create default role "user"
-            UserRole userRole = userRoleService.findByRoleName("user");
-            if (userRole == null) {
-                // If default role "user" not found, create it
-                userRole = new UserRole("user");
-                userRole = userRoleService.saveUserRole(userRole); // Save the user role
-            }
+            // Register the user
+            UserLoginResponse userLoginResponse = userService.registerUser(signUpRequestDTO);
 
-            // Save the user with the associated role
-            UserLoginResponse userLoginResponse = userService.registerUser(signUpRequestDTO, userRole);
-
-            // Generate JWT token
-            String accessToken = jwtService.generateToken(signUpRequestDTO.getUsername());
+            // Generate JWT token with roles
+            UserDetails userDetails = userService.loadUserByUsername(signUpRequestDTO.getUsername());
+            String accessToken = jwtService.generateToken(userDetails);
 
             // Create a refresh token
             RefreshToken refreshToken = refreshTokenService.createRefreshToken(signUpRequestDTO.getUsername());
@@ -176,9 +149,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
         }
     }
-
-
-
     @PostMapping("/refreshToken")
     public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO) {
         try {
@@ -186,7 +156,8 @@ public class UserController {
                     .map(refreshTokenService::verifyExpiration)
                     .map(RefreshToken::getUserInfo)
                     .map(userInfo -> {
-                        String accessToken = jwtService.generateToken(userInfo.getUsername());
+                        UserDetails userDetails = userService.loadUserByUsername(userInfo.getUsername());
+                        String accessToken = jwtService.generateToken(userDetails);
                         JwtResponseDTO jwtResponseDTO = JwtResponseDTO.builder()
                                 .accessToken(accessToken)
                                 .token(refreshTokenRequestDTO.getToken()).build();
