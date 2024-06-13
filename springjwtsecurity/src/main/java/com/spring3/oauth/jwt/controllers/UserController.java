@@ -2,7 +2,9 @@ package com.spring3.oauth.jwt.controllers;
 
 import com.spring3.oauth.jwt.dtos.*;
 import com.spring3.oauth.jwt.models.RefreshToken;
+import com.spring3.oauth.jwt.models.UserInfo;
 import com.spring3.oauth.jwt.models.UserRole;
+import com.spring3.oauth.jwt.repositories.UserRepository;
 import com.spring3.oauth.jwt.services.JwtService;
 import com.spring3.oauth.jwt.services.RefreshTokenService;
 import com.spring3.oauth.jwt.services.UserRoleService;
@@ -21,6 +23,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -41,6 +44,11 @@ public class UserController {
     @Autowired
     private UserRoleService userRoleService;
 
+
+    //test
+    @Autowired
+    UserRepository userRepository;
+
     @PostMapping(value = "/save")
     public ResponseEntity<?> saveUser(@RequestBody UserLoginRequest userLoginRequest) {
         try {
@@ -51,15 +59,70 @@ public class UserController {
         }
     }
 
+//    @GetMapping("/users")
+//    public ResponseEntity<?> getAllUsers() {
+//        try {
+//            List<UserLoginResponse> userLoginResponses = userService.getAllUser();
+//            return ResponseEntity.ok(userLoginResponses);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+//        }
+//    }
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers() {
         try {
-            List<UserLoginResponse> userLoginResponses = userService.getAllUser();
-            return ResponseEntity.ok(userLoginResponses);
+            for(UserInfo info: userRepository.findAll()){
+                System.out.println(info.getUsername());
+                for(UserRole r:info.getRoles()){
+                    System.out.println(r.getRoleName());
+                }
+            }
+            List<UserInfo> resp = userService.getAll();
+            return ResponseEntity.ok(resp);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
         }
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUser() {
+        try {
+//            Set<UserRole> rs=userRepository.findRolesByUsername("suman");
+//              //  System.out.println(info.getUsername());
+//                for(UserRole r:rs){
+//                    System.out.println(r.getRoleName());
+//                }
+//            Set<UserRole> rs1=userRepository.findRolesByUsername("demo");
+//            //  System.out.println(info.getUsername());
+//            for(UserRole r:rs1){
+//                System.out.println(r.getRoleName());
+//            }
+
+            List<UserInfo> resp = userService.getAll();
+
+            String user1 = resp.get(0).getUsername();
+
+            String user2 = resp.get(resp.size()-1).getUsername();
+
+            Set<UserRole> rs=userRepository.findRolesByUsername(user1);
+             //  System.out.println(info.getUsername());
+                for(UserRole r:rs){
+                    resp.get(0).getRoles().add(r);
+                   System.out.println(r.getRoleName());
+              }
+
+            Set<UserRole> rs2=userRepository.findRolesByUsername(user2);
+            //  System.out.println(info.getUsername());
+            for(UserRole r:rs2){
+                resp.get(resp.size()-1).getRoles().add(r);
+                System.out.println(r.getRoleName());
+            }
+
+            return ResponseEntity.ok(resp);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+        }
+    }
+
 
     @PostMapping("/profile")
     public ResponseEntity<?> getUserProfile() {

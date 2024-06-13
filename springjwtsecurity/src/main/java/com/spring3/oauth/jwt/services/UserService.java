@@ -28,5 +28,5 @@ public interface UserService {
     public Set<String> getUserRoleByUsername(String username);
 
   //  List<UserInfo> findAllWithRoles(); // get all users with roles
-
+  public List<UserInfo> getAll();
 }

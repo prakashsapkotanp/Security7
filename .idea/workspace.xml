@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7bba4686-5003-44c2-b66d-79176773fd1e" name="Changes" comment="error response dto added">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/19e08be0-6170-49fc-b643-d89c8b719e87.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/19e08be0-6170-49fc-b643-d89c8b719e87.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/UserInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/UserInfo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/UserRole.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/UserRole.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/repositories/UserRoleRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/repositories/UserRoleRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/services/JwtService.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/services/JwtService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/services/UserRoleService.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/services/UserRoleService.class" afterDir="false" />
-    </list>
+    <list default="true" id="7bba4686-5003-44c2-b66d-79176773fd1e" name="Changes" comment="error response dto added" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -98,14 +88,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
-        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
-      </set>
-    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">

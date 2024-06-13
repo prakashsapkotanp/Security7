@@ -94,6 +94,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserInfo> getAll() {
+         return userRepository.findAll();
+//        Type setOfDTOsType = new TypeToken<List<UserLoginResponse>>() {
+//        }.getType();
+//        return modelMapper.map(users, setOfDTOsType);
+    }
+
+    @Override
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }

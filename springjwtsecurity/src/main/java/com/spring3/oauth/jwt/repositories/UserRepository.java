@@ -3,6 +3,7 @@ package com.spring3.oauth.jwt.repositories;
 import com.spring3.oauth.jwt.helpers.RefreshableCRUDRepository;
 import com.spring3.oauth.jwt.models.UserInfo;
 import com.spring3.oauth.jwt.models.UserRole;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -11,7 +12,7 @@ import java.util.Set;
 
 
 @Repository
-public interface UserRepository extends RefreshableCRUDRepository<UserInfo, Long> {
+public interface UserRepository extends JpaRepository<UserInfo, Long> {
 
 //   public UserInfo findByUsername(String username);
 //   UserInfo findFirstById(Long id);
