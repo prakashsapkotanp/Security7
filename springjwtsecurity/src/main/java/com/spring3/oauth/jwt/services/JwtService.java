@@ -1,23 +1,32 @@
 package com.spring3.oauth.jwt.services;
 
+import com.spring3.oauth.jwt.models.UserInfo;
+import com.spring3.oauth.jwt.models.UserRole;
+import com.spring3.oauth.jwt.repositories.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @Component
 public class JwtService {
 
-    public static final String SECRET = "357638792F423F4428472B4B6250655368566D597133743677397A2443264629";
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+//    private UserRoleService userRoleService;
+//    private UserRoleRepository userRoleRepository;
+
+    private static final String SECRET = "357638792F423F4428472B4B6250655368566D597133743677397A2443264629";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -50,23 +59,30 @@ public class JwtService {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-
-
-    public String GenerateToken(String username){
+    public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
+       UserInfo userInfo = userRepository.findByUsername(username);
+//        List<String> roles = userRoleService.getRolesByUserId(userId);
+      //  List<UserRole> roles = userRoleRepository.findByUserId(userId);
+        Set<UserRole> roles = userInfo.getRoles();
+
+        return createToken(claims, username, roles);
     }
 
-
-
-    private String createToken(Map<String, Object> claims, String username) {
+    private String createToken(Map<String, Object> claims, String username, Set<UserRole> roles) {
+        List<String> roleNames = roles.stream()
+                .map(UserRole::getRoleName)
+                .toList();
+        claims.put("roles", roleNames);
+        claims.put("username", username);
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*1))
-                .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // Changed to 1 hour for practical use
+                .signWith(getSignKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     private Key getSignKey() {

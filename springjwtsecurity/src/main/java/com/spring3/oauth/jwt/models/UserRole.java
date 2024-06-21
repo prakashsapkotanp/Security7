@@ -25,8 +25,5 @@ public class UserRole {
         this.roleName = roleName;
     }
 
-    public String getRole( long) {
-
-    }
 
 }

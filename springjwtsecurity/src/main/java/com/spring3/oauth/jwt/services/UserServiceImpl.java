@@ -24,8 +24,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    UserRoleRepository roleRepository;
+//    @Autowired
+//    UserRoleRepository roleRepository;
 
     ModelMapper modelMapper = new ModelMapper();
 
@@ -44,7 +44,8 @@ public class UserServiceImpl implements UserService {
         String encodedPassword = encoder.encode(rawPassword);
 
         UserInfo user = modelMapper.map(userLoginRequest, UserInfo.class);
-        user.getRoles().add(roleRepository.findByRoleName("user"));
+       // user.getRoles().add(roleRepository.findByRoleName("user"));
+
         user.setPassword(encodedPassword);
         if(userLoginRequest.getId() != null){
             UserInfo oldUser = userRepository.findFirstById(userLoginRequest.getId());
