@@ -26,7 +26,7 @@ import org.hibernate.Length;
 public class MemberInfo {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name = "ID")
+    @Column(name = "ID",unique=true)
     private Long id;
     @Column(length = 20)
     private String firstname;
@@ -35,8 +35,11 @@ public class MemberInfo {
     @Column(length = 20)
     private String lastname;
     private Date dateOfBirth;
+    @Column(length = 6)
     private String bloodGroup;
+    @Column(length = 6)
     private String gender;
+    @Column(unique = true)
     private String email;
     private Date lastTimeOfDonation;
     private Date registrationDate;
