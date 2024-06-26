@@ -70,6 +70,7 @@ public class UserController {
 //    }
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers() {
+    	System.out.println("Hello I am here");
         try {
             for(UserInfo info: userRepository.findAll()){
                 System.out.println(info.getUsername());
