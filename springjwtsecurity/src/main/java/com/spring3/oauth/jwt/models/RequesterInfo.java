@@ -33,4 +33,7 @@ public class RequesterInfo {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private UserInfo userInfo;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "locationID", referencedColumnName = "id")
+    private MemberLocation memberLocation;
 }

@@ -30,4 +30,6 @@ public class UserInfo {
         inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
     )
     private Set<UserRole> roles = new HashSet<>();
+
+
 }

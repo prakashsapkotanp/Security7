@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.Length;
 
 @Entity
 @Data
@@ -27,8 +28,11 @@ public class MemberInfo {
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
+    @Column(length = 20)
     private String firstname;
+    @Column(length = 20)
     private String middlename;
+    @Column(length = 20)
     private String lastname;
     private Date dateOfBirth;
     private String bloodGroup;

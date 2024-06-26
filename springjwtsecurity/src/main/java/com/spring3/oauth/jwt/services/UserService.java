@@ -15,6 +15,7 @@ public interface UserService {
     UserLoginResponse saveUser(UserLoginRequest userLoginRequest);
 
     UserLoginResponse getUser();
+    UserLoginResponse getUserById(Long id);
 
     List<UserLoginResponse> getAllUser();
 

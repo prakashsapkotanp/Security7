@@ -68,22 +68,8 @@ public class UserController {
 //            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
 //        }
 //    }
+
     @GetMapping("/users")
-    public ResponseEntity<?> getAllUsers() {
-        try {
-            for(UserInfo info: userRepository.findAll()){
-                System.out.println(info.getUsername());
-                for(UserRole r:info.getRoles()){
-                    System.out.println(r.getRoleName());
-                }
-            }
-            List<UserInfo> resp = userService.getAll();
-            return ResponseEntity.ok(resp);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
-        }
-    }
-    @GetMapping("/{id}")
     public ResponseEntity<?> getUser() {
         try {
 //            Set<UserRole> rs=userRepository.findRolesByUsername("suman");
@@ -123,6 +109,10 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{id}")
+    public UserLoginResponse getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
+    }
 
     @PostMapping("/profile")
     public ResponseEntity<?> getUserProfile() {

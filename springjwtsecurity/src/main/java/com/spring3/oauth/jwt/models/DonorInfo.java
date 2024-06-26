@@ -32,4 +32,7 @@ public class DonorInfo {
      @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "requesterID", referencedColumnName = "id")
     private RequesterInfo requesterInfo;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "locationID", referencedColumnName = "id")
+    private MemberLocation memberLocation;
 }

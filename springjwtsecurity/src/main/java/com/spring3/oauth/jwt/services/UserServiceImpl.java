@@ -7,6 +7,7 @@ import com.spring3.oauth.jwt.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.Type;
 import java.util.HashSet;
@@ -84,6 +86,17 @@ public class UserServiceImpl implements UserService {
         UserInfo user = userRepository.findByUsername(usernameFromAccessToken);
         return modelMapper.map(user, UserLoginResponse.class);
     }
+
+
+    @Override
+    public UserLoginResponse getUserById(Long id) {
+        UserInfo user = userRepository.findFirstById(id);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id);
+        }
+        return modelMapper.map(user, UserLoginResponse.class);
+    }
+
 
     @Override
     public List<UserLoginResponse> getAllUser() {

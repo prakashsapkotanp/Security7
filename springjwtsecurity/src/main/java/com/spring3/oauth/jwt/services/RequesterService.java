@@ -2,15 +2,18 @@ package com.spring3.oauth.jwt.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.spring3.oauth.jwt.models.RequesterInfo;
 import com.spring3.oauth.jwt.repositories.RequesterRepository;
 
+
 @Service
 public class RequesterService {
-   
+
     private final RequesterRepository requesterRepository;
 
     public RequesterService(RequesterRepository requesterRepository) {
@@ -44,5 +47,6 @@ public class RequesterService {
     public void deleteRequester(Long id) {
         requesterRepository.deleteById(id);
     }
-    
+
+
 }
