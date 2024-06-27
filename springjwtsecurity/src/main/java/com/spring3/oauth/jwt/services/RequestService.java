@@ -39,14 +39,15 @@ public class RequestService {
         List<DonorInfo> nearbyDonors = new ArrayList<>();
         double radius = request.getCurrentRadius();
         while (radius <= 100 && nearbyDonors.isEmpty()) {
-            nearbyDonors = findNearbyDonors(request.getRequester().getMemberLocation(), radius);
+            nearbyDonors = findNearbyDonors(request.getRequester().getMemberLocation(), request.getRequester().getBloodGroup(), radius);
             radius += 10;
         }
 
-        // If no donors found within 100km, get all donors
+        // If no donors found within 100km, get all donors with matching blood group
         if (nearbyDonors.isEmpty()) {
             nearbyDonors = donorRepository.findAll().stream()
                     .filter(this::isEligibleForDonation)
+                    .filter(donor -> donor.getMemberInfo().getBloodGroup().equals(request.getRequester().getBloodGroup()))
                     .collect(Collectors.toList());
         }
 
@@ -60,10 +61,11 @@ public class RequestService {
         // No donor accepted, schedule to increase radius
     }
 
-    public List<DonorInfo> findNearbyDonors(MemberLocation requesterLocation, double radius) {
+    public List<DonorInfo> findNearbyDonors(MemberLocation requesterLocation, String bloodGroup, double radius) {
         return donorRepository.findAll().stream()
                 .filter(donor -> calculateDistance(requesterLocation, donor.getMemberLocation()) <= radius)
                 .filter(donor -> isEligibleForDonation(donor))
+                .filter(donor -> donor.getMemberInfo().getBloodGroup().equals(bloodGroup))
                 .sorted((d1, d2) -> Double.compare(calculateDistance(requesterLocation, d1.getMemberLocation()), calculateDistance(requesterLocation, d2.getMemberLocation())))
                 .collect(Collectors.toList());
     }
