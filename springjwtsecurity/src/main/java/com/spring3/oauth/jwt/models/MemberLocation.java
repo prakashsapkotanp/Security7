@@ -27,6 +27,7 @@ public class MemberLocation {
     private Long id;
     private double latitude;
     private double longitude;
+    
    
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "memberLocation", referencedColumnName = "id")

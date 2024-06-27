@@ -54,9 +54,7 @@ public class MemberController {
             return memberService.searchByLastName(lastname);
         } else if (middlename != null) {
             return memberService.searchByMiddleName(middlename);
-        } else if (email != null) {
-            return memberService.searchByEmail(email);
-        } else if (bloodGroup != null) {
+        }  else if (bloodGroup != null) {
             return memberService.searchByBloodGroup(bloodGroup);
         } else if (gender != null) {
             return memberService.searchByGender(gender);

@@ -40,13 +40,12 @@ public class MemberInfo {
     @Column(length = 6)
     private String gender;
     @Column(unique = true)
-    private String email;
     private Date lastTimeOfDonation;
     private Date registrationDate;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private UserInfo userInfo;
-   
+    
 
 }

@@ -37,9 +37,6 @@ public class MemberService {
         return memberRepository.findByMiddlename(middlename);
     }
 
-    public List<MemberInfo> searchByEmail(String email) {
-        return memberRepository.findByEmail(email);
-    }
 
     public List<MemberInfo> searchByBloodGroup(String bloodGroup) {
         return memberRepository.findByBloodGroup(bloodGroup);
