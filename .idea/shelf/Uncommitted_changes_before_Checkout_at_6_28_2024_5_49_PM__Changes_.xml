@@ -1,0 +1,44 @@
+<changelist name="Uncommitted_changes_before_Checkout_at_6_28_2024_5_49_PM_[Changes]" date="1719576250767" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_6_28_2024_5_49_PM_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 6/28/2024 5:49 PM [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/MemberLocation.class" />
+    <option name="AFTER_PATH" value="springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/MemberLocation.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_6_28_2024_5_49_PM_[Changes]/MemberLocation.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/UserInfo.class" />
+    <option name="AFTER_PATH" value="springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/UserInfo.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_6_28_2024_5_49_PM_[Changes]/UserInfo.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="springjwtsecurity/target/classes/com/spring3/oauth/jwt/services/MemberLocationService.class" />
+    <option name="AFTER_PATH" value="springjwtsecurity/target/classes/com/spring3/oauth/jwt/services/MemberLocationService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_6_28_2024_5_49_PM_[Changes]/MemberLocationService.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/UserInfo$UserInfoBuilder.class" />
+    <option name="AFTER_PATH" value="springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/UserInfo$UserInfoBuilder.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_6_28_2024_5_49_PM_[Changes]/UserInfo$UserInfoBuilder.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="springjwtsecurity/target/classes/com/spring3/oauth/jwt/services/MemberService.class" />
+    <option name="AFTER_PATH" value="springjwtsecurity/target/classes/com/spring3/oauth/jwt/services/MemberService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_6_28_2024_5_49_PM_[Changes]/MemberService.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="springjwtsecurity/target/classes/com/spring3/oauth/jwt/repositories/MemberRepository.class" />
+    <option name="AFTER_PATH" value="springjwtsecurity/target/classes/com/spring3/oauth/jwt/repositories/MemberRepository.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_6_28_2024_5_49_PM_[Changes]/MemberRepository.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="springjwtsecurity/target/classes/com/spring3/oauth/jwt/controllers/MemberController.class" />
+    <option name="AFTER_PATH" value="springjwtsecurity/target/classes/com/spring3/oauth/jwt/controllers/MemberController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_6_28_2024_5_49_PM_[Changes]/MemberController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/UserRole.class" />
+    <option name="AFTER_PATH" value="springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/UserRole.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_6_28_2024_5_49_PM_[Changes]/UserRole.class" />
+  </binary>
+</changelist>
