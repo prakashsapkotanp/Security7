@@ -39,7 +39,7 @@ public class MemberInfo {
     private String bloodGroup;
     @Column(length = 6)
     private String gender;
-    @Column(unique = true)
+   
     private Date lastTimeOfDonation;
     private Date registrationDate;
 

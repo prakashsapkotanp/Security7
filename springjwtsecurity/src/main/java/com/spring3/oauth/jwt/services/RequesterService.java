@@ -36,8 +36,8 @@ public class RequesterService {
         return requesterRepository.findByLatitudeAndLongitude(latitude, longitude);
     }
 
-    public List<RequesterInfo> getRequestersByPhone(Long phone) {
-        return requesterRepository.findByPhone(phone);
+    public List<RequesterInfo> getRequestersByName(String name) {
+        return requesterRepository.findByName(name);
     }
 
     public RequesterInfo saveRequester(RequesterInfo requesterInfo) {

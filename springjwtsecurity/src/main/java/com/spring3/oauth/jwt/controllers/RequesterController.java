@@ -47,9 +47,9 @@ public class RequesterController {
         return requesterService.getRequestersByLocation(latitude, longitude);
     }
 
-    @GetMapping("/phone/{phone}")
-    public List<RequesterInfo> getRequestersByPhone(@PathVariable Long phone) {
-        return requesterService.getRequestersByPhone(phone);
+    @GetMapping("/name/{name}")
+    public List<RequesterInfo> getRequestersByPhone(@PathVariable String name) {
+        return requesterService.getRequestersByName(name);
     }
 
     @PostMapping

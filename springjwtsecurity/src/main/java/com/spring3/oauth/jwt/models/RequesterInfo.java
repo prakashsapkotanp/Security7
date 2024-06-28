@@ -29,7 +29,7 @@ public class RequesterInfo {
     private int pints;
     private double latitude;
     private double longitude;
-    private Long phone;
+    private String name;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private UserInfo userInfo;
