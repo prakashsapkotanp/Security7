@@ -34,6 +34,18 @@ public class RequestService {
         requestRepository.save(request);
         sendRequestToNearbyDonors(request);
     }
+    @Transactional
+    public void updateRequest(Long id, Request updatedRequest) {
+        Request existingRequest = requestRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Request not found with id: " + id));
+
+        existingRequest.setRequester(updatedRequest.getRequester());
+        existingRequest.setCurrentRadius(updatedRequest.getCurrentRadius());
+        existingRequest.setCreatedAt(updatedRequest.getCreatedAt());
+        existingRequest.setDonorInfo(updatedRequest.getDonorInfo());
+
+        requestRepository.save(existingRequest);
+    }
 
     public void sendRequestToNearbyDonors(Request request) {
         List<DonorInfo> nearbyDonors = new ArrayList<>();
