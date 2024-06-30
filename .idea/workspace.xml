@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="7bba4686-5003-44c2-b66d-79176773fd1e" name="Changes" comment="error response dto added">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/UserRoleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/UserRoleRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/JwtService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/UserRoleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/UserRoleService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,7 +23,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="prakash-test" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -55,6 +52,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.OauthJwtApplication.executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
@@ -62,7 +60,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.OauthJwtApplication.executor": "Run",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "prakash",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -72,7 +70,20 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.OauthJwtApplication">
+    <configuration name="OauthJwtApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.spring3.oauth.jwt.OauthJwtApplication" />
+      <module name="oauth-jwt" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.spring3.oauth.jwt.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="OauthJwtApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="oauth-jwt" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.spring3.oauth.jwt.OauthJwtApplication" />
@@ -80,6 +91,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.OauthJwtApplication" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -136,5 +152,10 @@
     <MESSAGE value="signup added and token generated" />
     <MESSAGE value="error response dto added" />
     <option name="LAST_COMMIT_MESSAGE" value="error response dto added" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/backend$OauthJwtApplication.ic" NAME="OauthJwtApplication Coverage Results" MODIFIED="1719722103490" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.spring3.oauth.jwt.*</FILTER>
+    </SUITE>
   </component>
 </project>
