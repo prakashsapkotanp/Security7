@@ -4,14 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.spring3.oauth.jwt.models.MemberInfo;
 import com.spring3.oauth.jwt.services.MemberService;
@@ -54,9 +47,7 @@ public class MemberController {
             return memberService.searchByLastName(lastname);
         } else if (middlename != null) {
             return memberService.searchByMiddleName(middlename);
-        } else if (email != null) {
-            return memberService.searchByEmail(email);
-        } else if (bloodGroup != null) {
+        }  else if (bloodGroup != null) {
             return memberService.searchByBloodGroup(bloodGroup);
         } else if (gender != null) {
             return memberService.searchByGender(gender);
@@ -86,7 +77,11 @@ public class MemberController {
     public MemberInfo saveMember(@RequestBody MemberInfo memberInfo) {
         return memberService.saveMember(memberInfo);
     }
+    @PutMapping("/{id}")
 
+    public MemberInfo updateMember(@PathVariable Long id, @RequestBody MemberInfo memberInfo) {
+        return memberService.updateMember(id, memberInfo);
+    }
     @DeleteMapping("/{id}")
     public void deleteMember(@PathVariable Long id) {
         memberService.deleteMember(id);

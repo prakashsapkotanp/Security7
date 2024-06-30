@@ -37,9 +37,6 @@ public class MemberService {
         return memberRepository.findByMiddlename(middlename);
     }
 
-    public List<MemberInfo> searchByEmail(String email) {
-        return memberRepository.findByEmail(email);
-    }
 
     public List<MemberInfo> searchByBloodGroup(String bloodGroup) {
         return memberRepository.findByBloodGroup(bloodGroup);
@@ -60,5 +57,20 @@ public class MemberService {
     public void deleteMember(Long memberId) {
         memberRepository.deleteById(memberId);
     }
-    
+    public MemberInfo updateMember(Long id, MemberInfo memberInfo) {
+        MemberInfo existingMember = memberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Member not found with id: " + id));
+
+        existingMember.setFirstname(memberInfo.getFirstname());
+        existingMember.setMiddlename(memberInfo.getMiddlename());
+        existingMember.setLastname(memberInfo.getLastname());
+        existingMember.setDateOfBirth(memberInfo.getDateOfBirth());
+        existingMember.setBloodGroup(memberInfo.getBloodGroup());
+        existingMember.setGender(memberInfo.getGender());
+        existingMember.setLastTimeOfDonation(memberInfo.getLastTimeOfDonation());
+        existingMember.setRegistrationDate(memberInfo.getRegistrationDate());
+        existingMember.setUserInfo(memberInfo.getUserInfo());
+
+        return memberRepository.save(existingMember);
+    }
 }

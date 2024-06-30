@@ -8,11 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
-/**
- * @author mhmdz
- * Created By Zeeshan on 20-05-2023
- * @project oauth-jwt
- */
 
 @Entity
 @Data

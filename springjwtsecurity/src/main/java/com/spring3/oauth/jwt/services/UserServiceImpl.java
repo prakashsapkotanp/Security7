@@ -7,60 +7,75 @@ import com.spring3.oauth.jwt.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
-    ModelMapper modelMapper = new ModelMapper();
+    @Autowired
+    private UserRoleService userRoleService;
+
+    private ModelMapper modelMapper = new ModelMapper();
+    
 
     @Override
     public UserLoginResponse saveUser(UserLoginRequest userLoginRequest) {
-        if(userLoginRequest.getUsername() == null){
-            throw new RuntimeException("Parameter username is not found in request..!!");
-        } else if(userLoginRequest.getPassword() == null){
-            throw new RuntimeException("Parameter password is not found in request..!!");
+        if (userLoginRequest.getUsername() == null) {
+            throw new RuntimeException("Parameter 'username' is not found in request.");
+        } else if (userLoginRequest.getPassword() == null) {
+            throw new RuntimeException("Parameter 'password' is not found in request.");
         }
 
-        UserInfo savedUser = null;
-
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String rawPassword = userLoginRequest.getPassword();
-        String encodedPassword = encoder.encode(rawPassword);
+        String encodedPassword = encoder.encode(userLoginRequest.getPassword());
 
         UserInfo user = modelMapper.map(userLoginRequest, UserInfo.class);
         user.setPassword(encodedPassword);
-        if(userLoginRequest.getId() != null){
+        user.setRoles(new HashSet<>());
+
+        if (userLoginRequest.getRole() != null) {
+            UserRole userRole = userRoleService.findByRoleName("ROLE_" + userLoginRequest.getRole().getRoleName().toUpperCase());
+            if (userRole == null) {
+                userRole = userRoleService.save(new UserRole("ROLE_" + userLoginRequest.getRole().getRoleName().toUpperCase()));
+            }
+            user.getRoles().add(userRole);
+        }
+
+        UserInfo savedUser;
+        if (userLoginRequest.getId() != null) {
             UserInfo oldUser = userRepository.findFirstById(userLoginRequest.getId());
-            if(oldUser != null){
-                oldUser.setId(user.getId());
-                oldUser.setPassword(user.getPassword());
+            if (oldUser != null) {
                 oldUser.setUsername(user.getUsername());
+                oldUser.setPassword(user.getPassword());
                 oldUser.setRoles(user.getRoles());
 
                 savedUser = userRepository.save(oldUser);
-                userRepository.refresh(savedUser);
             } else {
                 throw new RuntimeException("Can't find record with identifier: " + userLoginRequest.getId());
             }
         } else {
             savedUser = userRepository.save(user);
         }
+
         userRepository.refresh(savedUser);
-        UserLoginResponse userLoginResponse = modelMapper.map(savedUser, UserLoginResponse.class);
-        return userLoginResponse;
+        return modelMapper.map(savedUser, UserLoginResponse.class);
     }
 
     @Override
@@ -69,16 +84,34 @@ public class UserServiceImpl implements UserService {
         UserDetails userDetail = (UserDetails) authentication.getPrincipal();
         String usernameFromAccessToken = userDetail.getUsername();
         UserInfo user = userRepository.findByUsername(usernameFromAccessToken);
-        UserLoginResponse userLoginResponse = modelMapper.map(user, UserLoginResponse.class);
-        return userLoginResponse;
+        return modelMapper.map(user, UserLoginResponse.class);
     }
+
+
+    @Override
+    public UserLoginResponse getUserById(Long id) {
+        UserInfo user = userRepository.findFirstById(id);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id);
+        }
+        return modelMapper.map(user, UserLoginResponse.class);
+    }
+
 
     @Override
     public List<UserLoginResponse> getAllUser() {
         List<UserInfo> users = (List<UserInfo>) userRepository.findAll();
-        Type setOfDTOsType = new TypeToken<List<UserLoginResponse>>(){}.getType();
-        List<UserLoginResponse> userLoginRespons = modelMapper.map(users, setOfDTOsType);
-        return userLoginRespons;
+        Type setOfDTOsType = new TypeToken<List<UserLoginResponse>>() {
+        }.getType();
+        return modelMapper.map(users, setOfDTOsType);
+    }
+
+    @Override
+    public List<UserInfo> getAll() {
+         return userRepository.findAll();
+//        Type setOfDTOsType = new TypeToken<List<UserLoginResponse>>() {
+//        }.getType();
+//        return modelMapper.map(users, setOfDTOsType);
     }
 
     @Override
@@ -95,37 +128,147 @@ public class UserServiceImpl implements UserService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String encodedPassword = encoder.encode(signUpRequestDTO.getPassword());
 
-        // Create a Set containing the default role "user"
         Set<UserRole> roles = new HashSet<>();
-        roles.add(new UserRole("user")); // Assuming UserRole constructor exists
+
+        // Check if this is the first user
+        if (userRepository.count() == 0) {
+            // Make the first user an admin
+            UserRole adminRole = userRoleService.findByRoleName("ROLE_ADMIN");
+            if (adminRole == null) {
+                adminRole = userRoleService.save(new UserRole("ROLE_ADMIN"));
+            }
+            roles.add(adminRole);
+        } else {
+            // Make others as users
+            UserRole defaultRole = userRoleService.findByRoleName("ROLE_USER");
+            if (defaultRole == null) {
+                defaultRole = userRoleService.save(new UserRole("ROLE_USER"));
+            }
+            roles.add(defaultRole);
+        }
 
         UserInfo newUser = UserInfo.builder()
                 .username(signUpRequestDTO.getUsername())
                 .password(encodedPassword)
-                .roles(roles) // Set roles
+                .roles(roles)
                 .build();
 
         UserInfo savedUser = userRepository.save(newUser);
-
-        UserLoginResponse userLoginResponse = modelMapper.map(savedUser, UserLoginResponse.class);
-
-        return userLoginResponse;
+        return modelMapper.map(savedUser, UserLoginResponse.class);
     }
+
     @Override
     public UserLoginResponse registerUser(SignUpRequestDTO signUpRequestDTO, UserRole userRole) {
-        // Create a Set containing the user's role
         Set<UserRole> roles = new HashSet<>();
-        roles.add(userRole);
+        UserRole role = userRoleService.findByRoleName("ROLE_" + userRole.getRoleName().toUpperCase());
+        if (role == null) {
+            role = userRoleService.save(new UserRole("ROLE_" + userRole.getRoleName().toUpperCase()));
+        }
+        roles.add(role);
 
-        // Create the user with the associated role
-        UserLoginRequest userLoginRequest = UserLoginRequest.builder()
+        UserInfo newUser = UserInfo.builder()
                 .username(signUpRequestDTO.getUsername())
-                .password(signUpRequestDTO.getPassword())
-                .role(userRole)
+                .password(new BCryptPasswordEncoder().encode(signUpRequestDTO.getPassword()))
+                .roles(roles)
                 .build();
 
-        // Save the user
-        return saveUser(userLoginRequest);
+        UserInfo savedUser = userRepository.save(newUser);
+        return modelMapper.map(savedUser, UserLoginResponse.class);
     }
+/**
+    @Override
+    public UserDetails loadUserByUsername(String username) {
+        UserInfo user = userRepository.findByUsername(username);
+//        for(UserRole r:user.getRoles()){
+//
+//            System.out.println(r.getRoleName());
+//
+//        }
+//        System.out.println("test point");
+//        if (user == null) {
+//            throw new RuntimeException("User not found");
+//        }
+
+
+        return org.springframework.security.core.userdetails.User.withUsername(user.getUsername())
+                .password(user.getPassword())
+                .authorities(user.getRoles().stream()
+                        .map(role -> role.getRoleName().toUpperCase())
+                        .toArray(String[]::new))
+                .build();
+    }
+**/
+//@Override
+//public UserDetails loadUserByUsername(String username) {
+//    UserInfo user = userRepository.findByUsername(username);
+//    if (user == null) {
+//        throw new RuntimeException("User not found");
+//    }
+//
+//    Set<GrantedAuthority> authorities = getUserRoleByUsername(username).stream()
+//            .map(role -> new SimpleGrantedAuthority(role.toUpperCase()))
+//            .collect(Collectors.toSet());
+//
+//        for(UserRole r:user.getRoles()){
+//
+//            System.out.println(r.getRoleName());
+//
+//        }
+//        System.out.println("test point");
+//        if (user == null) {
+//            throw new RuntimeException("User not found");
+//        }
+
+//    return org.springframework.security.core.userdetails.User.withUsername(user.getUsername())
+//            .password(user.getPassword())
+//            .authorities(authorities)
+//            .build();
+//}
+@Override
+public UserDetails loadUserByUsername(String username) {
+    UserInfo user = userRepository.findByUsername(username);
+    if (user == null) {
+        throw new RuntimeException("User not found");
+    }
+
+    Set<GrantedAuthority> authorities = getUserRoleByUsername(username).stream()
+            .map(role -> new SimpleGrantedAuthority(role.toUpperCase()))
+            .collect(Collectors.toSet());
+
+    return org.springframework.security.core.userdetails.User.withUsername(user.getUsername())
+            .password(user.getPassword())
+            .authorities(authorities)
+            .build();
+}
+
+//    @Override
+//    public Set<String> getUserRoleByUsername(String username) {
+//        UserInfo user = userRepository.findByUsername(username);
+//        if (user != null && user.getRoles() != null) {
+//
+//            System.out.println("----------getUserRoleByUsername-------------");
+//
+//            System.out.println(user.getRoles().stream()
+//                    .map(UserRole::getRoleName)
+//                    .collect(Collectors.toSet()));
+//
+//            return user.getRoles().stream()
+//                    .map(UserRole::getRoleName)
+//                    .collect(Collectors.toSet());
+//        }
+//        return new HashSet<>();
+//    }
+@Override
+public Set<String> getUserRoleByUsername(String username) {
+    Set<UserRole> roles = userRepository.findRolesByUsername(username);
+    if (roles != null) {
+        return roles.stream()
+                .map(UserRole::getRoleName)
+                .collect(Collectors.toSet());
+    }
+    return new HashSet<>();
+}
+
+
 
 }

@@ -17,8 +17,6 @@ public interface MemberRepository extends JpaRepository<MemberInfo,Long> {
 
     List<MemberInfo> findByMiddlename(String middlename);
 
-    List<MemberInfo> findByEmail(String email);
-
     List<MemberInfo> findByBloodGroup(String bloodGroup);
 
     List<MemberInfo> findByGender(String gender);

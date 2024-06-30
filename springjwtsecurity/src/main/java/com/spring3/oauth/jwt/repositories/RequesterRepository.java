@@ -16,5 +16,5 @@ public interface RequesterRepository extends JpaRepository<RequesterInfo,Long> {
 
     List<RequesterInfo> findByLatitudeAndLongitude(double latitude, double longitude);
 
-    List<RequesterInfo> findByPhone(Long phone);
+    List<RequesterInfo> findByName(String name);
 }

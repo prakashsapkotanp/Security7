@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -16,7 +17,7 @@ public class UserLoginResponse {
 
     private Long id;
     private String username;
-    private Set<UserRole> roles;
+    private List<UserRole> roles;
 
 
 }

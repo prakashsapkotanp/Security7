@@ -1,0 +1,403 @@
+Index: springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/UserInfo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.spring3.oauth.jwt.models;\r\n\r\nimport com.fasterxml.jackson.annotation.JsonIgnore;\r\nimport jakarta.persistence.*;\r\nimport lombok.*;\r\nimport java.util.HashSet;\r\nimport java.util.Set;\r\n\r\n@Entity\r\n@Data\r\n@NoArgsConstructor\r\n@AllArgsConstructor\r\n@Table(name = \"users\")\r\n@Builder\r\npublic class UserInfo {\r\n\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.AUTO)\r\n    private long id;\r\n\r\n    private String username;\r\n\r\n    @JsonIgnore\r\n    private String password;\r\n\r\n    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)\r\n    @JoinTable(\r\n        name = \"users_roles\",\r\n        joinColumns = @JoinColumn(name = \"user_id\", referencedColumnName = \"id\"),\r\n        inverseJoinColumns = @JoinColumn(name = \"role_id\", referencedColumnName = \"id\")\r\n    )\r\n    private Set<UserRole> roles = new HashSet<>();\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/UserInfo.java b/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/UserInfo.java
+--- a/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/UserInfo.java	(revision 4dec26fb10287282f009df8c2fc7782987c7112d)
++++ b/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/UserInfo.java	(date 1719575383120)
+@@ -17,10 +17,9 @@
+     @Id
+     @GeneratedValue(strategy = GenerationType.AUTO)
+     private long id;
+-
++    @Column(unique = true)
+     private String username;
+ 
+-    @JsonIgnore
+     private String password;
+ 
+     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+Index: springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/MemberInfo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.spring3.oauth.jwt.models;\r\n\r\nimport java.sql.Date;\r\n\r\nimport jakarta.persistence.CascadeType;\r\nimport jakarta.persistence.Column;\r\nimport jakarta.persistence.Entity;\r\nimport jakarta.persistence.GeneratedValue;\r\nimport jakarta.persistence.GenerationType;\r\nimport jakarta.persistence.Id;\r\nimport jakarta.persistence.JoinColumn;\r\nimport jakarta.persistence.OneToOne;\r\nimport jakarta.persistence.Table;\r\nimport lombok.AllArgsConstructor;\r\nimport lombok.Data;\r\nimport lombok.NoArgsConstructor;\r\nimport lombok.ToString;\r\nimport org.hibernate.Length;\r\n\r\n@Entity\r\n@Data\r\n@ToString\r\n@NoArgsConstructor\r\n@AllArgsConstructor\r\n@Table(name = \"MEMBERS\")\r\npublic class MemberInfo {\r\n    @Id\r\n    @GeneratedValue(strategy= GenerationType.AUTO)\r\n    @Column(name = \"ID\",unique=true)\r\n    private Long id;\r\n    @Column(length = 20)\r\n    private String firstname;\r\n    @Column(length = 20)\r\n    private String middlename;\r\n    @Column(length = 20)\r\n    private String lastname;\r\n    private Date dateOfBirth;\r\n    @Column(length = 6)\r\n    private String bloodGroup;\r\n    @Column(length = 6)\r\n    private String gender;\r\n   \r\n    private Date lastTimeOfDonation;\r\n    private Date registrationDate;\r\n\r\n    @OneToOne(cascade = CascadeType.ALL)\r\n    @JoinColumn(name = \"userId\", referencedColumnName = \"id\")\r\n    private UserInfo userInfo;\r\n    \r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/MemberInfo.java b/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/MemberInfo.java
+--- a/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/MemberInfo.java	(revision 4dec26fb10287282f009df8c2fc7782987c7112d)
++++ b/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/MemberInfo.java	(date 1719574463645)
+@@ -2,15 +2,7 @@
+ 
+ import java.sql.Date;
+ 
+-import jakarta.persistence.CascadeType;
+-import jakarta.persistence.Column;
+-import jakarta.persistence.Entity;
+-import jakarta.persistence.GeneratedValue;
+-import jakarta.persistence.GenerationType;
+-import jakarta.persistence.Id;
+-import jakarta.persistence.JoinColumn;
+-import jakarta.persistence.OneToOne;
+-import jakarta.persistence.Table;
++import jakarta.persistence.*;
+ import lombok.AllArgsConstructor;
+ import lombok.Data;
+ import lombok.NoArgsConstructor;
+@@ -43,7 +35,7 @@
+     private Date lastTimeOfDonation;
+     private Date registrationDate;
+ 
+-    @OneToOne(cascade = CascadeType.ALL)
++    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+     @JoinColumn(name = "userId", referencedColumnName = "id")
+     private UserInfo userInfo;
+     
+Index: springjwtsecurity/src/main/java/com/spring3/oauth/jwt/controllers/MemberController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.spring3.oauth.jwt.controllers;\r\n\r\nimport java.sql.Date;\r\nimport java.util.List;\r\n\r\n\r\nimport org.springframework.web.bind.annotation.DeleteMapping;\r\nimport org.springframework.web.bind.annotation.GetMapping;\r\nimport org.springframework.web.bind.annotation.PathVariable;\r\nimport org.springframework.web.bind.annotation.PostMapping;\r\nimport org.springframework.web.bind.annotation.RequestBody;\r\nimport org.springframework.web.bind.annotation.RequestMapping;\r\nimport org.springframework.web.bind.annotation.RequestParam;\r\nimport org.springframework.web.bind.annotation.RestController;\r\n\r\nimport com.spring3.oauth.jwt.models.MemberInfo;\r\nimport com.spring3.oauth.jwt.services.MemberService;\r\n\r\n@RestController\r\n@RequestMapping(\"/api/v1/members\")\r\npublic class MemberController {\r\n    \r\n    private final MemberService memberService;\r\n\r\n    public MemberController(MemberService memberService) {\r\n        this.memberService = memberService;\r\n    }\r\n\r\n\r\n    @GetMapping\r\n    public List<MemberInfo> getAllMembers() {\r\n        return memberService.getAllMembers();\r\n    }\r\n\r\n    @GetMapping(\"/{id}\")\r\n    public MemberInfo getMemberById(@PathVariable Long id) {\r\n        return memberService.getMemberById(id)\r\n                .orElseThrow(() -> new RuntimeException(\"Member not found with id: \" + id));\r\n    }\r\n\r\n    @GetMapping(\"/search\")\r\n    public List<MemberInfo> searchMembers(\r\n            @RequestParam(required = false) String firstname,\r\n            @RequestParam(required = false) String lastname,\r\n            @RequestParam(required = false) String middlename,\r\n            @RequestParam(required = false) String email,\r\n            @RequestParam(required = false) String bloodGroup,\r\n            @RequestParam(required = false) String gender,\r\n            @RequestParam(required = false) Date dateOfBirth) {\r\n\r\n        if (firstname != null) {\r\n            return memberService.searchByFirstName(firstname);\r\n        } else if (lastname != null) {\r\n            return memberService.searchByLastName(lastname);\r\n        } else if (middlename != null) {\r\n            return memberService.searchByMiddleName(middlename);\r\n        }  else if (bloodGroup != null) {\r\n            return memberService.searchByBloodGroup(bloodGroup);\r\n        } else if (gender != null) {\r\n            return memberService.searchByGender(gender);\r\n        } else if (dateOfBirth != null) {\r\n            return memberService.searchByDateOfBirth(dateOfBirth);\r\n        } else {\r\n            // Handle invalid or missing parameters\r\n            if (firstname != null ||\r\n                lastname != null ||\r\n                middlename != null ||\r\n                email != null ||\r\n                bloodGroup != null ||\r\n                gender != null||\r\n                dateOfBirth !=null\r\n                ) \r\n                {\r\n                \r\n                    throw new IllegalArgumentException(\"No member found\");\r\n                }\r\n            else{\r\n                throw new IllegalArgumentException(\"At least one search parameter is required\");\r\n                }\r\n        }\r\n    }\r\n\r\n    @PostMapping\r\n    public MemberInfo saveMember(@RequestBody MemberInfo memberInfo) {\r\n        return memberService.saveMember(memberInfo);\r\n    }\r\n\r\n    @DeleteMapping(\"/{id}\")\r\n    public void deleteMember(@PathVariable Long id) {\r\n        memberService.deleteMember(id);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/controllers/MemberController.java b/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/controllers/MemberController.java
+--- a/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/controllers/MemberController.java	(revision 4dec26fb10287282f009df8c2fc7782987c7112d)
++++ b/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/controllers/MemberController.java	(date 1719574810903)
+@@ -4,6 +4,7 @@
+ import java.util.List;
+ 
+ 
++import org.springframework.http.ResponseEntity;
+ import org.springframework.web.bind.annotation.DeleteMapping;
+ import org.springframework.web.bind.annotation.GetMapping;
+ import org.springframework.web.bind.annotation.PathVariable;
+@@ -33,11 +34,9 @@
+     }
+ 
+     @GetMapping("/{id}")
+-    public MemberInfo getMemberById(@PathVariable Long id) {
+-        return memberService.getMemberById(id)
+-                .orElseThrow(() -> new RuntimeException("Member not found with id: " + id));
++    public ResponseEntity<MemberInfo> getMemberById(@PathVariable Long id) {
++        return ResponseEntity.ok(memberService.getMemberInfoById(id));
+     }
+-
+     @GetMapping("/search")
+     public List<MemberInfo> searchMembers(
+             @RequestParam(required = false) String firstname,
+Index: springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/MemberRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.spring3.oauth.jwt.repositories;\r\n\r\nimport java.sql.Date;\r\nimport java.util.List;\r\n\r\nimport org.springframework.data.jpa.repository.JpaRepository;\r\nimport org.springframework.stereotype.Repository;\r\n\r\nimport com.spring3.oauth.jwt.models.MemberInfo;\r\n\r\n@Repository\r\npublic interface MemberRepository extends JpaRepository<MemberInfo,Long> {\r\n    \r\n    List<MemberInfo> findByFirstname(String firstname);\r\n\r\n    List<MemberInfo> findByLastname(String lastname);\r\n\r\n    List<MemberInfo> findByMiddlename(String middlename);\r\n\r\n    List<MemberInfo> findByBloodGroup(String bloodGroup);\r\n\r\n    List<MemberInfo> findByGender(String gender);\r\n\r\n    List<MemberInfo> findByDateOfBirth(Date dateOfBirth);\r\n    \r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/MemberRepository.java b/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/MemberRepository.java
+--- a/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/MemberRepository.java	(revision 4dec26fb10287282f009df8c2fc7782987c7112d)
++++ b/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/MemberRepository.java	(date 1719574712938)
+@@ -2,8 +2,11 @@
+ 
+ import java.sql.Date;
+ import java.util.List;
++import java.util.Optional;
+ 
+ import org.springframework.data.jpa.repository.JpaRepository;
++import org.springframework.data.jpa.repository.Query;
++import org.springframework.data.repository.query.Param;
+ import org.springframework.stereotype.Repository;
+ 
+ import com.spring3.oauth.jwt.models.MemberInfo;
+@@ -22,5 +25,11 @@
+     List<MemberInfo> findByGender(String gender);
+ 
+     List<MemberInfo> findByDateOfBirth(Date dateOfBirth);
+-    
++     MemberInfo getMemberInfoById(Long id);
++
++//    @Query("SELECT mi FROM MemberInfo mi "
++//            + "LEFT JOIN FETCH mi.userInfo ui "
++//            + "LEFT JOIN FETCH ui.roles r "
++//            + "WHERE mi.id = :id")
++//    Optional<MemberInfo> findByIdWithRoles(@Param("id") Long id);
+ }
+Index: springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/MemberService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.spring3.oauth.jwt.services;\r\n\r\nimport java.sql.Date;\r\nimport java.util.List;\r\nimport java.util.Optional;\r\n\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport com.spring3.oauth.jwt.models.MemberInfo;\r\nimport com.spring3.oauth.jwt.repositories.MemberRepository;\r\n\r\n@Service\r\npublic class MemberService {\r\n      private final MemberRepository memberRepository;\r\n\r\n    public MemberService(MemberRepository memberRepository) {\r\n        this.memberRepository = memberRepository;\r\n    }\r\n\r\n    public List<MemberInfo> getAllMembers() {\r\n        return memberRepository.findAll();\r\n    }\r\n\r\n    public Optional<MemberInfo> getMemberById(Long memberId) {\r\n        return memberRepository.findById(memberId);\r\n    }\r\n\r\n    public List<MemberInfo> searchByFirstName(String firstname) {\r\n        return memberRepository.findByFirstname(firstname);\r\n    }\r\n\r\n    public List<MemberInfo> searchByLastName(String lastname) {\r\n        return memberRepository.findByLastname(lastname);\r\n    }\r\n\r\n    public List<MemberInfo> searchByMiddleName(String middlename) {\r\n        return memberRepository.findByMiddlename(middlename);\r\n    }\r\n\r\n\r\n    public List<MemberInfo> searchByBloodGroup(String bloodGroup) {\r\n        return memberRepository.findByBloodGroup(bloodGroup);\r\n    }\r\n\r\n    public List<MemberInfo> searchByGender(String gender) {\r\n        return memberRepository.findByGender(gender);\r\n    }\r\n\r\n    public List<MemberInfo> searchByDateOfBirth(Date dateOfBirth) {\r\n        return memberRepository.findByDateOfBirth(dateOfBirth);\r\n    }\r\n\r\n    public MemberInfo saveMember(MemberInfo memberInfo) {\r\n        return memberRepository.save(memberInfo);\r\n    }\r\n\r\n    public void deleteMember(Long memberId) {\r\n        memberRepository.deleteById(memberId);\r\n    }\r\n    \r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/MemberService.java b/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/MemberService.java
+--- a/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/MemberService.java	(revision 4dec26fb10287282f009df8c2fc7782987c7112d)
++++ b/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/MemberService.java	(date 1719575305092)
+@@ -4,26 +4,40 @@
+ import java.util.List;
+ import java.util.Optional;
+ 
++import com.spring3.oauth.jwt.models.UserInfo;
++import com.spring3.oauth.jwt.models.UserRole;
++import com.spring3.oauth.jwt.repositories.UserRepository;
++import org.slf4j.Logger;
++import org.slf4j.LoggerFactory;
++import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Service;
+ 
+ import com.spring3.oauth.jwt.models.MemberInfo;
+ import com.spring3.oauth.jwt.repositories.MemberRepository;
++import org.springframework.web.client.ResourceAccessException;
++
++import javax.management.relation.Role;
+ 
+ @Service
+ public class MemberService {
++    @Autowired
+       private final MemberRepository memberRepository;
+-
+-    public MemberService(MemberRepository memberRepository) {
++    @Autowired
++      private final UserRepository userRepository;
++    public MemberService(MemberRepository memberRepository, UserRepository userRepository) {
+         this.memberRepository = memberRepository;
++        this.userRepository = userRepository;
+     }
+ 
+     public List<MemberInfo> getAllMembers() {
+         return memberRepository.findAll();
+     }
++    private static final Logger logger = LoggerFactory.getLogger(MemberService.class);
+ 
+-    public Optional<MemberInfo> getMemberById(Long memberId) {
+-        return memberRepository.findById(memberId);
+-    }
++
++//    public Optional<MemberInfo> getMemberById(Long memberId) {
++//        return memberRepository.findById(memberId);
++//    }
+ 
+     public List<MemberInfo> searchByFirstName(String firstname) {
+         return memberRepository.findByFirstname(firstname);
+@@ -57,5 +71,21 @@
+     public void deleteMember(Long memberId) {
+         memberRepository.deleteById(memberId);
+     }
++
++    public  MemberInfo getMemberInfoById(Long id){
++        System.out.println(memberRepository.getMemberInfoById(id).getUserInfo().getRoles());
++        MemberInfo memberInfo = memberRepository.getMemberInfoById(id);
++        UserInfo userInfo = userRepository.findByUsername(memberInfo.getUserInfo().getUsername());
++        memberInfo.getUserInfo().getRoles().add((UserRole) userInfo.getRoles());
++        return memberInfo;
++    }
++//    public MemberInfo getMemberById(Long id) {
++//        MemberInfo memberInfo = memberRepository.findByIdWithRoles(id)
++//                .orElseThrow(() -> new ResourceAccessException("Member not found with id: " + id));
++//        logger.info("Fetched MemberInfo: {}", memberInfo);
++//        logger.info("Fetched UserInfo with Roles: {}", memberInfo.getUserInfo().getRoles());
++//
++//        return memberInfo;
++//    }
+     
+ }
+Index: springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/MemberLocation.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.spring3.oauth.jwt.models;\r\n\r\nimport jakarta.persistence.CascadeType;\r\nimport jakarta.persistence.Column;\r\nimport jakarta.persistence.Entity;\r\nimport jakarta.persistence.GeneratedValue;\r\nimport jakarta.persistence.GenerationType;\r\nimport jakarta.persistence.Id;\r\nimport jakarta.persistence.JoinColumn;\r\nimport jakarta.persistence.OneToOne;\r\nimport jakarta.persistence.Table;\r\nimport lombok.AllArgsConstructor;\r\nimport lombok.Data;\r\nimport lombok.NoArgsConstructor;\r\nimport lombok.ToString;\r\n\r\n@Entity\r\n@Data\r\n@ToString\r\n@NoArgsConstructor\r\n@AllArgsConstructor\r\n@Table(name = \"MEMBER_LOCATION\")\r\npublic class MemberLocation {\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.AUTO)\r\n    @Column(name = \"ID\")\r\n    private Long id;\r\n    private double latitude;\r\n    private double longitude;\r\n    \r\n   \r\n    @OneToOne(cascade = CascadeType.ALL)\r\n    @JoinColumn(name = \"memberLocation\", referencedColumnName = \"id\")\r\n    private MemberInfo memberInfo;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/MemberLocation.java b/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/MemberLocation.java
+--- a/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/MemberLocation.java	(revision 4dec26fb10287282f009df8c2fc7782987c7112d)
++++ b/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/MemberLocation.java	(date 1719568577990)
+@@ -30,6 +30,6 @@
+     
+    
+     @OneToOne(cascade = CascadeType.ALL)
+-    @JoinColumn(name = "memberLocation", referencedColumnName = "id")
++    @JoinColumn(name = "memberId", referencedColumnName = "id")
+     private MemberInfo memberInfo;
+ }
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"7bba4686-5003-44c2-b66d-79176773fd1e\" name=\"Changes\" comment=\"error response dto added\" />\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Interface\" />\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"prakash-test\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n    <option name=\"UPDATE_TYPE\" value=\"REBASE\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;prakashsapkotanp&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/prakashsapkotanp/Security7.git&quot;,\r\n    &quot;accountId&quot;: &quot;af83f326-e9e8-4b03-bfae-6c9899b75790&quot;\r\n  }\r\n}</component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 7\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2g8UtTmKvw1DsyGQPoOt621lEIx\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,\r\n    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,\r\n    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,\r\n    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,\r\n    &quot;Spring Boot.OauthJwtApplication.executor&quot;: &quot;Run&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;main&quot;,\r\n    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RunManager\">\r\n    <configuration default=\"true\" type=\"JetRunConfigurationType\">\r\n      <module name=\"demo\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration default=\"true\" type=\"KotlinStandaloneScriptRunConfigurationType\">\r\n      <module name=\"demo\" />\r\n      <option name=\"filePath\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"OauthJwtApplication\" type=\"SpringBootApplicationConfigurationType\" factoryName=\"Spring Boot\" nameIsGenerated=\"true\">\r\n      <module name=\"oauth-jwt\" />\r\n      <option name=\"SPRING_BOOT_MAIN_CLASS\" value=\"com.spring3.oauth.jwt.OauthJwtApplication\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"7bba4686-5003-44c2-b66d-79176773fd1e\" name=\"Changes\" comment=\"\" />\r\n      <created>1715078912968</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1715078912968</updated>\r\n      <workItem from=\"1715079398482\" duration=\"243000\" />\r\n      <workItem from=\"1715079681524\" duration=\"4476000\" />\r\n      <workItem from=\"1715085120261\" duration=\"2862000\" />\r\n      <workItem from=\"1715096684042\" duration=\"188000\" />\r\n      <workItem from=\"1715147634201\" duration=\"5486000\" />\r\n      <workItem from=\"1715167376980\" duration=\"4325000\" />\r\n      <workItem from=\"1715240367279\" duration=\"6346000\" />\r\n      <workItem from=\"1715247868600\" duration=\"319000\" />\r\n      <workItem from=\"1717151615925\" duration=\"298000\" />\r\n      <workItem from=\"1717151916919\" duration=\"1101000\" />\r\n      <workItem from=\"1717401468878\" duration=\"72000\" />\r\n      <workItem from=\"1717401559233\" duration=\"28000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"signup added and token generated\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1715096810723</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1715096810723</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"adjustment added\" />\r\n    <MESSAGE value=\"signup added and token generated\" />\r\n    <MESSAGE value=\"error response dto added\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"error response dto added\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 4dec26fb10287282f009df8c2fc7782987c7112d)
++++ b/.idea/workspace.xml	(date 1719575861813)
+@@ -4,7 +4,26 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="7bba4686-5003-44c2-b66d-79176773fd1e" name="Changes" comment="error response dto added" />
++    <list default="true" id="7bba4686-5003-44c2-b66d-79176773fd1e" name="Changes" comment="">
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/controllers/MemberController.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/controllers/MemberController.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/MemberInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/MemberInfo.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/MemberLocation.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/MemberLocation.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/UserInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/UserInfo.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/UserRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/UserRole.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/MemberRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/MemberRepository.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/MemberLocationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/MemberLocationService.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/MemberService.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/resources/application.properties" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/controllers/MemberController.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/controllers/MemberController.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/MemberLocation.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/MemberLocation.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/UserInfo$UserInfoBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/UserInfo$UserInfoBuilder.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/UserInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/UserInfo.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/UserRole.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/UserRole.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/repositories/MemberRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/repositories/MemberRepository.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/services/MemberLocationService.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/services/MemberLocationService.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/services/MemberService.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/services/MemberService.class" afterDir="false" />
++    </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+@@ -21,7 +40,7 @@
+   <component name="Git.Settings">
+     <option name="RECENT_BRANCH_BY_REPOSITORY">
+       <map>
+-        <entry key="$PROJECT_DIR$" value="prakash-test" />
++        <entry key="$PROJECT_DIR$" value="main" />
+       </map>
+     </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+@@ -50,6 +69,7 @@
+   </component>
+   <component name="PropertiesComponent">{
+   &quot;keyToString&quot;: {
++    &quot;Application.OauthJwtApplication.executor&quot;: &quot;Run&quot;,
+     &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+@@ -57,7 +77,7 @@
+     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+     &quot;Spring Boot.OauthJwtApplication.executor&quot;: &quot;Run&quot;,
+-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;prakash&quot;,
+     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+@@ -67,7 +87,20 @@
+     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+   }
+ }</component>
+-  <component name="RunManager">
++  <component name="RunManager" selected="Application.OauthJwtApplication">
++    <configuration name="OauthJwtApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
++      <option name="MAIN_CLASS_NAME" value="com.spring3.oauth.jwt.OauthJwtApplication" />
++      <module name="oauth-jwt" />
++      <extension name="coverage">
++        <pattern>
++          <option name="PATTERN" value="com.spring3.oauth.jwt.*" />
++          <option name="ENABLED" value="true" />
++        </pattern>
++      </extension>
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
+     <configuration default="true" type="JetRunConfigurationType">
+       <module name="demo" />
+       <method v="2">
+@@ -88,6 +121,12 @@
+         <option name="Make" enabled="true" />
+       </method>
+     </configuration>
++    <recent_temporary>
++      <list>
++        <item itemvalue="Application.OauthJwtApplication" />
++        <item itemvalue="Application.OauthJwtApplication" />
++      </list>
++    </recent_temporary>
+   </component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+@@ -141,4 +180,9 @@
+     <MESSAGE value="error response dto added" />
+     <option name="LAST_COMMIT_MESSAGE" value="error response dto added" />
+   </component>
++  <component name="com.intellij.coverage.CoverageDataManagerImpl">
++    <SUITE FILE_PATH="coverage/backend$OauthJwtApplication.ic" NAME="OauthJwtApplication Coverage Results" MODIFIED="1719542869362" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
++      <FILTER>com.spring3.oauth.jwt.*</FILTER>
++    </SUITE>
++  </component>
+ </project>
+\ No newline at end of file
+Index: springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/UserRole.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.spring3.oauth.jwt.models;\r\n\r\nimport java.util.HashSet;\r\nimport java.util.Set;\r\n\r\nimport com.fasterxml.jackson.annotation.JsonIgnore;\r\n\r\nimport jakarta.persistence.Column;\r\nimport jakarta.persistence.Entity;\r\nimport jakarta.persistence.GeneratedValue;\r\nimport jakarta.persistence.GenerationType;\r\nimport jakarta.persistence.Id;\r\nimport jakarta.persistence.ManyToMany;\r\nimport jakarta.persistence.Table;\r\nimport lombok.AllArgsConstructor;\r\nimport lombok.Data;\r\nimport lombok.NoArgsConstructor;\r\n\r\n@Entity\r\n@Data\r\n@NoArgsConstructor\r\n@AllArgsConstructor\r\n@Table(name = \"roles\")\r\npublic class UserRole {\r\n\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.AUTO)\r\n    private Long id;\r\n\r\n    @Column(name = \"name\")\r\n    private String roleName;\r\n\r\n    @ManyToMany(mappedBy = \"roles\")\r\n    @JsonIgnore\r\n    private Set<UserInfo> users = new HashSet<>();\r\n\r\n    public UserRole(String roleName) {\r\n        this.roleName = roleName;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/UserRole.java b/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/UserRole.java
+--- a/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/UserRole.java	(revision 4dec26fb10287282f009df8c2fc7782987c7112d)
++++ b/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/UserRole.java	(date 1719566769559)
+@@ -31,7 +31,6 @@
+     private String roleName;
+ 
+     @ManyToMany(mappedBy = "roles")
+-    @JsonIgnore
+     private Set<UserInfo> users = new HashSet<>();
+ 
+     public UserRole(String roleName) {
+Index: springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/MemberLocationService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.spring3.oauth.jwt.services;\r\n\r\nimport java.util.List;\r\nimport java.util.Optional;\r\n\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport com.spring3.oauth.jwt.models.MemberLocation;\r\nimport com.spring3.oauth.jwt.repositories.MemberLocationRepository;\r\n\r\n@Service\r\npublic class MemberLocationService {\r\n     private final MemberLocationRepository memberLocationRepository;\r\n\r\n\r\n    public MemberLocationService(MemberLocationRepository memberLocationRepository) {\r\n        this.memberLocationRepository = memberLocationRepository;\r\n    }\r\n\r\n    public List<MemberLocation> getAllMemberLocations() {\r\n        return memberLocationRepository.findAll();\r\n    }\r\n\r\n    public Optional<MemberLocation> getMemberLocationById(Long id) {\r\n        return memberLocationRepository.findById(id);\r\n    }\r\n\r\n    public MemberLocation saveMemberLocation(MemberLocation memberLocation) {\r\n        return memberLocationRepository.save(memberLocation);\r\n    }\r\n\r\n    public void deleteMemberLocation(Long id) {\r\n        memberLocationRepository.deleteById(id);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/MemberLocationService.java b/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/MemberLocationService.java
+--- a/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/MemberLocationService.java	(revision 4dec26fb10287282f009df8c2fc7782987c7112d)
++++ b/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/MemberLocationService.java	(date 1719568340076)
+@@ -3,6 +3,9 @@
+ import java.util.List;
+ import java.util.Optional;
+ 
++import com.spring3.oauth.jwt.helpers.ResourceNotFoundException;
++import com.spring3.oauth.jwt.models.MemberInfo;
++import com.spring3.oauth.jwt.repositories.MemberRepository;
+ import org.springframework.stereotype.Service;
+ 
+ import com.spring3.oauth.jwt.models.MemberLocation;
+@@ -11,7 +14,7 @@
+ @Service
+ public class MemberLocationService {
+      private final MemberLocationRepository memberLocationRepository;
+-
++    private MemberRepository memberRepository;
+ 
+     public MemberLocationService(MemberLocationRepository memberLocationRepository) {
+         this.memberLocationRepository = memberLocationRepository;
+@@ -25,10 +28,23 @@
+         return memberLocationRepository.findById(id);
+     }
+ 
++//    public MemberLocation saveMemberLocation(MemberLocation memberLocation) {
++//        return memberLocationRepository.save(memberLocation);
++//    }
++
+     public MemberLocation saveMemberLocation(MemberLocation memberLocation) {
++        MemberInfo memberInfo = memberLocation.getMemberInfo();
++        if (memberInfo != null && memberInfo.getId() != null) {
++            Optional<MemberInfo> optionalMemberInfo = memberRepository.findById(memberInfo.getId());
++            if (optionalMemberInfo.isPresent()) {
++                MemberInfo existingMemberInfo = optionalMemberInfo.get();
++                memberLocation.setMemberInfo(existingMemberInfo);
++            } else {
++                throw new ResourceNotFoundException("MemberInfo", "id", memberInfo.getId());
++            }
++        }
+         return memberLocationRepository.save(memberLocation);
+     }
+-
+     public void deleteMemberLocation(Long id) {
+         memberLocationRepository.deleteById(id);
+     }
