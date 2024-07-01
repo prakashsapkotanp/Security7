@@ -29,18 +29,21 @@ public class RequestService {
     public void createRequest(RequesterInfo requester) {
         Request request = new Request();
         request.setRequester(requester);
-        request.setCurrentRadius(5);
+        request.setCurrentLatitude(requester.getMemberLocation().getLatitude());
+        request.setCurrentLongitude(requester.getMemberLocation().getLongitude());
         request.setCreatedAt(LocalDateTime.now());
         requestRepository.save(request);
         sendRequestToNearbyDonors(request);
     }
+
     @Transactional
     public void updateRequest(Long id, Request updatedRequest) {
         Request existingRequest = requestRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Request not found with id: " + id));
 
         existingRequest.setRequester(updatedRequest.getRequester());
-        existingRequest.setCurrentRadius(updatedRequest.getCurrentRadius());
+        existingRequest.setCurrentLatitude(updatedRequest.getCurrentLatitude());
+        existingRequest.setCurrentLongitude(updatedRequest.getCurrentLongitude());
         existingRequest.setCreatedAt(updatedRequest.getCreatedAt());
         existingRequest.setDonorInfo(updatedRequest.getDonorInfo());
 
@@ -49,11 +52,11 @@ public class RequestService {
 
     public void sendRequestToNearbyDonors(Request request) {
         List<DonorInfo> nearbyDonors = new ArrayList<>();
-        double radius = request.getCurrentRadius();
+        double radius = 5;
         while (radius <= 100 && nearbyDonors.isEmpty()) {
             nearbyDonors = findNearbyDonors(request.getRequester().getMemberLocation(), request.getRequester().getBloodGroup(), radius);
             radius += 10;
-        }     
+        }
 
         // If no donors found within 100km, get all donors with matching blood group
         if (nearbyDonors.isEmpty()) {
@@ -76,7 +79,7 @@ public class RequestService {
     public List<DonorInfo> findNearbyDonors(MemberLocation requesterLocation, String bloodGroup, double radius) {
         return donorRepository.findAll().stream()
                 .filter(donor -> calculateDistance(requesterLocation, donor.getMemberLocation()) <= radius)
-                .filter(donor -> isEligibleForDonation(donor))
+                .filter(this::isEligibleForDonation)
                 .filter(donor -> donor.getMemberInfo().getBloodGroup().equals(bloodGroup))
                 .sorted((d1, d2) -> Double.compare(calculateDistance(requesterLocation, d1.getMemberLocation()), calculateDistance(requesterLocation, d2.getMemberLocation())))
                 .collect(Collectors.toList());
