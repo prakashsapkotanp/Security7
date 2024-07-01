@@ -24,6 +24,8 @@ public interface UserRepository extends JpaRepository<UserInfo, Long> {
     @Query("SELECT ur FROM UserInfo u JOIN u.roles ur WHERE u.username = :username")
     Set<UserRole> findRolesByUsername(@Param("username") String username);
 
+    UserInfo findByUsernameAndPassword(String username, String password);
+
 //    @Query("SELECT ur FROM UserInfo u JOIN u.roles ur WHERE u.id = :id")
 //    Set<UserRole> findRolesByUserId(@Param("id") Long id);
 
