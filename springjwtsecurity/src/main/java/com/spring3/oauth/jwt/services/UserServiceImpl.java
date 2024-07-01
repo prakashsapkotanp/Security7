@@ -4,10 +4,14 @@ import com.spring3.oauth.jwt.dtos.*;
 import com.spring3.oauth.jwt.models.UserInfo;
 import com.spring3.oauth.jwt.models.UserRole;
 import com.spring3.oauth.jwt.repositories.UserRepository;
+import com.spring3.oauth.jwt.repositories.UserRoleRepository;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,9 +21,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.management.relation.Role;
 import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private UserRoleService userRoleService;
 
     private ModelMapper modelMapper = new ModelMapper();
+    private UserRoleRepository userRoleRepository;
     
 
     @Override
@@ -88,15 +95,24 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Override
-    public UserLoginResponse getUserById(Long id) {
-        UserInfo user = userRepository.findFirstById(id);
-        if (user == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id);
-        }
-        return modelMapper.map(user, UserLoginResponse.class);
+//    @Override
+//    public UserLoginResponse getUserById(Long id) {
+//        UserInfo user = userRepository.findFirstById(id);
+//        if (user == null) {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id);
+//        }
+//        return modelMapper.map(user, UserLoginResponse.class);
+//    }
+//public ResponseEntity<UserInfo> getUserById(Long id) {
+//    UserInfo user = userRepository.findById(id).orElse(null);
+//    if (user == null) {
+//        return ResponseEntity.notFound().build();
+//    }
+//    return ResponseEntity.ok(user);
+//}
+    public UserInfo getUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
     }
-
 
     @Override
     public List<UserLoginResponse> getAllUser() {
@@ -113,6 +129,7 @@ public class UserServiceImpl implements UserService {
 //        }.getType();
 //        return modelMapper.map(users, setOfDTOsType);
     }
+
 
     @Override
     public boolean existsByUsername(String username) {
@@ -269,6 +286,23 @@ public Set<String> getUserRoleByUsername(String username) {
     return new HashSet<>();
 }
 
+
+      @Override
+         public UserInfo updateUser(Long id, UserUpdateRequestDTO updatedUserInfo) {
+             UserInfo existingUser = userRepository.findById(id)
+                     .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+             if (updatedUserInfo.getUsername() != null) {
+                 existingUser.setUsername(updatedUserInfo.getUsername());
+             }
+
+             if (updatedUserInfo.getPassword() != null) {
+                 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+                 existingUser.setPassword(encoder.encode(updatedUserInfo.getPassword()));
+             }
+
+             return userRepository.save(existingUser);
+         }
 
 
 }
