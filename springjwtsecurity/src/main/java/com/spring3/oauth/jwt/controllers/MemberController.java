@@ -22,6 +22,7 @@ public class MemberController {
 
     @GetMapping
     public List<MemberInfo> getAllMembers() {
+    	System.out.println(memberService.getAllMembers());
         return memberService.getAllMembers();
     }
 
@@ -75,6 +76,7 @@ public class MemberController {
 
     @PostMapping
     public MemberInfo saveMember(@RequestBody MemberInfo memberInfo) {
+    	
         return memberService.saveMember(memberInfo);
     }
     @PutMapping("/{id}")
