@@ -53,7 +53,7 @@ public class RequestService {
         while (radius <= 100 && nearbyDonors.isEmpty()) {
             nearbyDonors = findNearbyDonors(request.getRequester().getMemberLocation(), request.getRequester().getBloodGroup(), radius);
             radius += 10;
-        }
+        }     
 
         // If no donors found within 100km, get all donors with matching blood group
         if (nearbyDonors.isEmpty()) {
