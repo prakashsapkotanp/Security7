@@ -41,7 +41,7 @@ public class RequestService {
         while (radius <= 100 && nearbyDonors.isEmpty()) {
             nearbyDonors = findNearbyDonors(request.getRequester().getMemberLocation(), radius);
             radius += 10;
-        }
+        }     
 
         // If no donors found within 100km, get all donors
         if (nearbyDonors.isEmpty()) {
