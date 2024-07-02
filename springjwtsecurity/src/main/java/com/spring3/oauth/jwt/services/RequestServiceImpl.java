@@ -1,4 +1,3 @@
-
 package com.spring3.oauth.jwt.services;
 
 import com.spring3.oauth.jwt.models.DonorInfo;
@@ -75,15 +74,28 @@ public class RequestServiceImpl implements RequestService {
                 request.setDisabled(true);
             }
 
-            requestRepository.save(request); // Ensure requesterInfo is saved or cascaded
+            requestRepository.save(request);
         }
     }
 
     @Override
     @Transactional
     public void createRequest(Request request) {
-        // Ensure requesterInfo is saved or cascaded
         requestRepository.save(request);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Request> getRequestsByMemberId(Long memberId) {
+        MemberInfo memberInfo = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+        return requestRepository.findByRequester(memberInfo);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Request> getAllRequests() {
+        return requestRepository.findAll();
     }
 
     private boolean checkRequestFulfilled(Request request) {
