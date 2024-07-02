@@ -3,10 +3,8 @@ package com.spring3.oauth.jwt.services;
 import com.spring3.oauth.jwt.dtos.SignUpRequestDTO;
 import com.spring3.oauth.jwt.dtos.UserLoginRequest;
 import com.spring3.oauth.jwt.dtos.UserLoginResponse;
-import com.spring3.oauth.jwt.dtos.UserUpdateRequestDTO;
 import com.spring3.oauth.jwt.models.UserInfo;
 import com.spring3.oauth.jwt.models.UserRole;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
@@ -18,8 +16,7 @@ public interface UserService {
 
     UserLoginResponse getUser();
 
-    //ResponseEntity<UserInfo> getUserById(Long id);
-    UserInfo getUserById(Long id);
+    UserLoginResponse getUserById(Long id);
 
     List<UserLoginResponse> getAllUser();
 
@@ -30,10 +27,8 @@ public interface UserService {
     UserLoginResponse registerUser(SignUpRequestDTO signUpRequestDTO, UserRole userRole);
 
     UserDetails loadUserByUsername(String username);
-
     public Set<String> getUserRoleByUsername(String username);
 
-    //  List<UserInfo> findAllWithRoles(); // get all users with roles
-    public List<UserInfo> getAll();
-    UserInfo updateUser(Long id, UserUpdateRequestDTO updatedUserInfo);
-  }
+  //  List<UserInfo> findAllWithRoles(); // get all users with roles
+  public List<UserInfo> getAll();
+}

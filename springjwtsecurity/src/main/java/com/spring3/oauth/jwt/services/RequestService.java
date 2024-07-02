@@ -1,112 +1,13 @@
 package com.spring3.oauth.jwt.services;
 
-import com.spring3.oauth.jwt.models.DonorInfo;
-import com.spring3.oauth.jwt.models.MemberLocation;
 import com.spring3.oauth.jwt.models.Request;
-import com.spring3.oauth.jwt.models.RequesterInfo;
-import com.spring3.oauth.jwt.repositories.DonorRepository;
-import com.spring3.oauth.jwt.repositories.RequestRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Service
-public class RequestService {
-
-    @Autowired
-    private RequestRepository requestRepository;
-
-    @Autowired
-    private DonorRepository donorRepository;
-
-    @Transactional
-    public void createRequest(RequesterInfo requester) {
-        Request request = new Request();
-        request.setRequester(requester);
-        request.setCurrentLatitude(requester.getMemberLocation().getLatitude());
-        request.setCurrentLongitude(requester.getMemberLocation().getLongitude());
-        request.setCreatedAt(LocalDateTime.now());
-        requestRepository.save(request);
-        sendRequestToNearbyDonors(request);
-    }
-
-    @Transactional
-    public void updateRequest(Long id, Request updatedRequest) {
-        Request existingRequest = requestRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Request not found with id: " + id));
-
-        existingRequest.setRequester(updatedRequest.getRequester());
-        existingRequest.setCurrentLatitude(updatedRequest.getCurrentLatitude());
-        existingRequest.setCurrentLongitude(updatedRequest.getCurrentLongitude());
-        existingRequest.setCreatedAt(updatedRequest.getCreatedAt());
-        existingRequest.setDonorInfo(updatedRequest.getDonorInfo());
-
-        requestRepository.save(existingRequest);
-    }
-
-    public void sendRequestToNearbyDonors(Request request) {
-        List<DonorInfo> nearbyDonors = new ArrayList<>();
-        double radius = 5;
-        while (radius <= 100 && nearbyDonors.isEmpty()) {
-            nearbyDonors = findNearbyDonors(request.getRequester().getMemberLocation(), request.getRequester().getBloodGroup(), radius);
-            radius += 10;
-        }
-
-        // If no donors found within 100km, get all donors with matching blood group
-        if (nearbyDonors.isEmpty()) {
-            nearbyDonors = donorRepository.findAll().stream()
-                    .filter(this::isEligibleForDonation)
-                    .filter(donor -> donor.getMemberInfo().getBloodGroup().equals(request.getRequester().getBloodGroup()))
-                    .collect(Collectors.toList());
-        }
-
-        for (DonorInfo donor : nearbyDonors) {
-            if (donor.isStatus()) {
-                // Simulate donor accepting the request
-                handleDonorResponse(donor, request, true);
-                return;
-            }
-        }
-        // No donor accepted, schedule to increase radius
-    }
-
-    public List<DonorInfo> findNearbyDonors(MemberLocation requesterLocation, String bloodGroup, double radius) {
-        return donorRepository.findAll().stream()
-                .filter(donor -> calculateDistance(requesterLocation, donor.getMemberLocation()) <= radius)
-                .filter(this::isEligibleForDonation)
-                .filter(donor -> donor.getMemberInfo().getBloodGroup().equals(bloodGroup))
-                .sorted((d1, d2) -> Double.compare(calculateDistance(requesterLocation, d1.getMemberLocation()), calculateDistance(requesterLocation, d2.getMemberLocation())))
-                .collect(Collectors.toList());
-    }
-
-    public void handleDonorResponse(DonorInfo donor, Request request, boolean accepted) {
-        if (accepted) {
-            requestRepository.delete(request);
-            donor.setStatus(false);
-            donorRepository.save(donor);
-        }
-    }
-
-    private boolean isEligibleForDonation(DonorInfo donor) {
-        LocalDate lastDonation = donor.getMemberInfo().getLastTimeOfDonation().toLocalDate();
-        return lastDonation.plusDays(90).isBefore(LocalDate.now());
-    }
-
-    private double calculateDistance(MemberLocation loc1, MemberLocation loc2) {
-        // Haversine formula
-        double R = 6371; // Radius of the earth in km
-        double dLat = Math.toRadians(loc2.getLatitude() - loc1.getLatitude());
-        double dLon = Math.toRadians(loc2.getLongitude() - loc1.getLongitude());
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-                + Math.cos(Math.toRadians(loc1.getLatitude())) * Math.cos(Math.toRadians(loc2.getLatitude()))
-                * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c; // Distance in km
-    }
+public interface RequestService {
+    void sendRequest(Long requestId);
+    void handleDonorResponse(Long requestId, Long donorId, boolean accepted);
+    void createRequest(Request request);
+    List<Request> getRequestsByMemberId(Long memberId);
+    List<Request> getAllRequests();
 }

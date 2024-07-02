@@ -1,22 +1,12 @@
 package com.spring3.oauth.jwt.models;
 
-import java.sql.Date;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.Length;
+
+import java.sql.Date;
 
 @Entity
 @Data
@@ -27,7 +17,7 @@ import org.hibernate.Length;
 public class MemberInfo {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name = "ID",unique=true)
+    @Column(name = "ID", unique=true)
     private Long id;
     @Column(length = 20)
     private String firstname;
@@ -40,13 +30,14 @@ public class MemberInfo {
     private String bloodGroup;
     @Column(length = 6)
     private String gender;
-    @Column(unique = true)
     private Date lastTimeOfDonation;
     private Date registrationDate;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private UserInfo userInfo;
-    
 
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "locationId", referencedColumnName = "id")
+    private MemberLocation memberLocation;
 }
