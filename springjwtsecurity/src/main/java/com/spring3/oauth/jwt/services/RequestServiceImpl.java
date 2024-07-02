@@ -82,6 +82,7 @@ public class RequestServiceImpl implements RequestService {
     @Transactional
     public void createRequest(Request request) {
         requestRepository.save(request);
+        sendRequest(request.getId()); // Automatically send the request after saving
     }
 
     @Override
