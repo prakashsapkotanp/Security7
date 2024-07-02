@@ -1,11 +1,14 @@
 package com.spring3.oauth.jwt.controllers;
 
 import com.spring3.oauth.jwt.models.Request;
+import com.spring3.oauth.jwt.repositories.RequestRepository;
 import com.spring3.oauth.jwt.services.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/requests")
@@ -13,6 +16,8 @@ public class RequestController {
 
     @Autowired
     private RequestService requestService;
+    @Autowired
+    private RequestRepository requestRepository;
 
     @PostMapping("/send/{requestId}")
     public ResponseEntity<String> sendRequest(@PathVariable Long requestId) {
@@ -44,5 +49,9 @@ public class RequestController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
         }
+    }
+    @GetMapping
+    public List<Request>getAllRequests(){
+        return requestRepository.findAll();
     }
 }

@@ -84,6 +84,7 @@ public class RequestServiceImpl implements RequestService {
     public void createRequest(Request request) {
         // Ensure requesterInfo is saved or cascaded
         requestRepository.save(request);
+        sendRequest(request.getId()); // Automatically send the request after saving
     }
 
     private boolean checkRequestFulfilled(Request request) {
