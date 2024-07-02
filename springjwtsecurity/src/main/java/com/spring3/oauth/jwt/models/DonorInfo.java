@@ -1,14 +1,6 @@
 package com.spring3.oauth.jwt.models;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,13 +18,17 @@ public class DonorInfo {
     @Column(name = "ID")
     private Long id;
     private boolean status;
-    @OneToOne(cascade = CascadeType.ALL)
+
+    //@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "memberID", referencedColumnName = "id")
     private MemberInfo memberInfo;
-     @OneToOne(cascade = CascadeType.ALL)
+
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "requesterID", referencedColumnName = "id")
     private RequesterInfo requesterInfo;
-    @OneToOne(cascade = CascadeType.ALL)
+
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "locationID", referencedColumnName = "id")
     private MemberLocation memberLocation;
 }

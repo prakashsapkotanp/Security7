@@ -19,11 +19,9 @@ public class ScheduledTasks {
     private RequestService requestService;
 
     @Scheduled(fixedRate = 600000) // Every 10 minutes
-    public void increaseRequestRadius() {
-        List<Request> requests = requestRepository.findByCurrentRadiusLessThanEqual(100);
+    public void attemptToSendRequests() {
+        List<Request> requests = requestRepository.findAll();
         for (Request request : requests) {
-            request.setCurrentRadius(request.getCurrentRadius() + 10);
-            requestRepository.save(request);
             requestService.sendRequestToNearbyDonors(request);
         }
     }

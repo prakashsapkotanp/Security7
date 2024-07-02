@@ -3,6 +3,7 @@ package com.spring3.oauth.jwt.models;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,14 +23,12 @@ import lombok.ToString;
 @Table(name = "MEMBER_LOCATION")
 public class MemberLocation {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     private double latitude;
     private double longitude;
-    
-   
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "memberLocation", referencedColumnName = "id")
     private MemberInfo memberInfo;
 }

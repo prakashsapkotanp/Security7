@@ -1,5 +1,6 @@
 package com.spring3.oauth.jwt.controllers;
 
+import com.spring3.oauth.jwt.models.Request;
 import com.spring3.oauth.jwt.models.RequesterInfo;
 import com.spring3.oauth.jwt.services.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,5 +18,10 @@ public class RequestController {
     public ResponseEntity<String> createRequest(@RequestBody RequesterInfo requester) {
         requestService.createRequest(requester);
         return ResponseEntity.ok("Request sent to nearby donors");
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateRequest(@PathVariable Long id, @RequestBody Request updatedRequest) {
+        requestService.updateRequest(id, updatedRequest);
+        return ResponseEntity.ok("Request updated successfully");
     }
 }

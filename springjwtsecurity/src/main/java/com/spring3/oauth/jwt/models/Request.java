@@ -23,7 +23,9 @@ public class Request {
     @JoinColumn(name = "requester_id")
     private RequesterInfo requester;
 
-    private double currentRadius;
+    private double currentLatitude;
+    private double currentLongitude;
+   // private double currentRadius;
     private LocalDateTime createdAt;
 
     @ManyToOne

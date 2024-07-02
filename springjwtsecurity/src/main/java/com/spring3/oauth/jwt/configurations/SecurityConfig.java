@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .requestMatchers("/api/v1/user/login", "/api/v1/user/signup", "/api/v1/refreshToken").permitAll()
 //                .requestMatchers("/api/v1/**").authenticated()
-                .requestMatchers("/api/v1/user/profile","api/v1/members").hasAuthority("ROLE_USER") // Allow access to ROLE_USER
+                .requestMatchers("/api/v1/user/profile","api/v1/members","api/v1/member-locations","api/v1/requesters").hasAuthority("ROLE_USER") // Allow access to ROLE_USER
                 .requestMatchers("/api/v1/**").hasAuthority("ROLE_ADMIN") // Allow access to ROLE_ADMIN
                 .and()
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
