@@ -23,12 +23,17 @@ public class Request {
     @JoinColumn(name = "requester_id")
     private RequesterInfo requester;
 
-    private double currentRadius;
+//    private double currentRadius;
+    private double currentLatitude;
+    private double currentLongitude;
     private LocalDateTime createdAt;
+    private boolean disabled = false;
+    private int totalPintsDonated = 0;
 
     @ManyToOne
     @JoinColumn(name = "donor_id")
     private DonorInfo donorInfo;
+
 
 
 }
