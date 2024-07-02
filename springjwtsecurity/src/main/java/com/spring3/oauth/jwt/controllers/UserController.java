@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -109,10 +110,19 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{id}")
-    public UserLoginResponse getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
+//    @GetMapping("/{id}")
+//    public UserLoginResponse getUserById(@PathVariable Long id) {
+//        return userService.getUserById(id);
+//    }
+@GetMapping("/{id}")
+public ResponseEntity<UserInfo> getUserById(@PathVariable Long id) {
+    UserInfo user = userService.getUserById(id);
+    if (user == null) {
+        return ResponseEntity.notFound().build();
     }
+    return ResponseEntity.ok(user);
+}
+
 
     @PostMapping("/profile")
     public ResponseEntity<?> getUserProfile() {
@@ -124,11 +134,42 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    @GetMapping("/test")
-    public String test() {
-        return "Welcome";
+    @PutMapping("/{id}")
+    public ResponseEntity<UserInfo> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequestDTO updatedUserInfo) {
+        try {
+            UserInfo updatedUser = userService.updateUser(id, updatedUserInfo);
+            return ResponseEntity.ok(updatedUser);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
+
+
+//    @PutMapping("/update/{userId}")
+//    public ResponseEntity<UserInfo> updateUser(
+//            @PathVariable Long userId,
+//            @RequestParam String username,
+//            @RequestParam String password,
+//            @RequestParam String roles) {
+//        UserUpdateRequestDTO updatedUserInfo = new UserUpdateRequestDTO();
+//        updatedUserInfo.setUsername(username);
+//        updatedUserInfo.setPassword(password);
+//        updatedUserInfo.setRoles(Arrays.asList(roles.split(","))); // Assuming roles are comma-separated
+//
+//        try {
+//            UserInfo updatedUser = userService.updateUser(userId, updatedUserInfo);
+//            return ResponseEntity.ok(updatedUser);
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
+//    @PatchMapping("/{userId}")
+//    public ResponseEntity<Void> updateUser(@PathVariable Long userId, @RequestBody UserUpdateRequestDTO userUpdateDTO) {
+//        userService.updateUser(userId, new UserUpdateRequestDTO());
+//        return ResponseEntity.ok().build();
+//    }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateAndGetToken(@RequestBody AuthRequestDTO authRequestDTO) {

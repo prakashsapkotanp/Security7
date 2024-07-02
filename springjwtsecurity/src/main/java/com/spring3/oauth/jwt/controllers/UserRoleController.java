@@ -38,6 +38,17 @@ public class UserRoleController {
         UserRole savedRole = userRoleService.saveUserRole(userRole);
         return new ResponseEntity<>(savedRole, HttpStatus.CREATED);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<UserRole> updateUserRole(@PathVariable Long id, @RequestBody UserRole updatedRole) {
+        try {
+            UserRole updatedUserRole = userRoleService.updateUserRole(id, updatedRole);
+            return ResponseEntity.ok(updatedUserRole);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserRole(@PathVariable Long id) {

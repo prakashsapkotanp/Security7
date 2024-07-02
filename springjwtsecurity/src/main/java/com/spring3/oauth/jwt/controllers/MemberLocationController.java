@@ -67,7 +67,7 @@ public class MemberLocationController {
     ) {
         List<MemberLocation> allMemberLocations = memberLocationService.getAllMemberLocations();
 
-        // Calculate distances and filter users within specified radius
+        // Calculate distances and filter users within the specified radius
         List<MemberLocation> nearestMemberLocations = allMemberLocations.stream()
                 .filter(memberLocation -> calculateDistance(latitude, longitude, memberLocation.getLatitude(), memberLocation.getLongitude()) <= radius)
                 .collect(Collectors.toList());
@@ -78,7 +78,7 @@ public class MemberLocationController {
         return ResponseEntity.ok(nearestMemberLocations);
     }
 
-    // Helper method to calculate distance between two locations using Haversine formula
+    // Helper method to calculate distance between two locations using the Haversine formula
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         double earthRadius = 6371; // in kilometers
 
@@ -93,4 +93,5 @@ public class MemberLocationController {
 
         return earthRadius * c;
     }
+
 }
