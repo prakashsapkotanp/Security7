@@ -14,9 +14,6 @@ import java.util.Set;
 @Repository
 public interface UserRepository extends JpaRepository<UserInfo, Long> {
 
-//   public UserInfo findByUsername(String username);
-//   UserInfo findFirstById(Long id);
-//    boolean existsByUsername(String username);
     UserInfo findByUsername(String username);
     UserInfo findFirstById(Long id);
     boolean existsByUsername(String username);
@@ -24,7 +21,5 @@ public interface UserRepository extends JpaRepository<UserInfo, Long> {
     @Query("SELECT ur FROM UserInfo u JOIN u.roles ur WHERE u.username = :username")
     Set<UserRole> findRolesByUsername(@Param("username") String username);
 
-//    @Query("SELECT ur FROM UserInfo u JOIN u.roles ur WHERE u.id = :id")
-//    Set<UserRole> findRolesByUserId(@Param("id") Long id);
 
 }

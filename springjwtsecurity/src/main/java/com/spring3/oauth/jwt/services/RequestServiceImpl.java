@@ -1,11 +1,16 @@
-package com.spring3.oauth.jwt.services.impl;
 
-import com.spring3.oauth.jwt.models.*;
-import com.spring3.oauth.jwt.repositories.*;
-import com.spring3.oauth.jwt.services.NotificationService;
-import com.spring3.oauth.jwt.services.RequestService;
+package com.spring3.oauth.jwt.services;
+
+import com.spring3.oauth.jwt.models.DonorInfo;
+import com.spring3.oauth.jwt.models.MemberInfo;
+import com.spring3.oauth.jwt.models.Request;
+import com.spring3.oauth.jwt.models.RequesterInfo;
+import com.spring3.oauth.jwt.repositories.DonorRepository;
+import com.spring3.oauth.jwt.repositories.MemberRepository;
+import com.spring3.oauth.jwt.repositories.RequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,8 +30,11 @@ public class RequestServiceImpl implements RequestService {
     private NotificationService notificationService;
 
     @Override
+    @Transactional
     public void sendRequest(Long requestId) {
-        Request request = requestRepository.findById(requestId).orElseThrow(() -> new RuntimeException("Request not found"));
+        Request request = requestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Request not found"));
+
         double currentRadius = 5.0;
         boolean requestFulfilled = false;
 
@@ -35,11 +43,9 @@ public class RequestServiceImpl implements RequestService {
                     request.getRequester().getBloodGroup(), request.getCurrentLatitude(), request.getCurrentLongitude(), currentRadius);
 
             for (MemberInfo donor : potentialDonors) {
-                // Send request notification to donor
                 notificationService.sendRequestNotification(donor, request);
             }
 
-            // Simulate donor responses and check if the request is fulfilled
             requestFulfilled = checkRequestFulfilled(request);
 
             if (!requestFulfilled) {
@@ -48,12 +54,12 @@ public class RequestServiceImpl implements RequestService {
         }
 
         if (!requestFulfilled) {
-            // Mark the request as expired or take other actions
             System.out.println("Request ID: " + request.getId() + " could not be fulfilled within 100 km radius.");
         }
     }
 
     @Override
+    @Transactional
     public void handleDonorResponse(Long requestId, Long donorId, boolean accepted) {
         Request request = requestRepository.findById(requestId)
                 .orElseThrow(() -> new RuntimeException("Request not found"));
@@ -63,15 +69,21 @@ public class RequestServiceImpl implements RequestService {
                     .orElseThrow(() -> new RuntimeException("Donor not found"));
 
             request.setDonorInfo(donorInfo);
-            // Assuming each donor donates 1 pint, update the total pints donated
             request.setTotalPintsDonated(request.getTotalPintsDonated() + 1);
 
-            // Check if the required pints are fulfilled and update the request
             if (checkRequestFulfilled(request)) {
                 request.setDisabled(true);
             }
-            requestRepository.save(request);
+
+            requestRepository.save(request); // Ensure requesterInfo is saved or cascaded
         }
+    }
+
+    @Override
+    @Transactional
+    public void createRequest(Request request) {
+        // Ensure requesterInfo is saved or cascaded
+        requestRepository.save(request);
     }
 
     private boolean checkRequestFulfilled(Request request) {

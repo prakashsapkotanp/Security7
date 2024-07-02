@@ -19,21 +19,17 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "requester_id")
     private RequesterInfo requester;
 
-//    private double currentRadius;
     private double currentLatitude;
     private double currentLongitude;
     private LocalDateTime createdAt;
     private boolean disabled = false;
     private int totalPintsDonated = 0;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "donor_id")
     private DonorInfo donorInfo;
-
-
-
 }

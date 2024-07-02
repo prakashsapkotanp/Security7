@@ -4,15 +4,18 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import com.spring3.oauth.jwt.models.MemberLocation;
 import com.spring3.oauth.jwt.services.MemberLocationService;
 
 @RestController
 @RequestMapping("/api/v1/member-locations")
 public class MemberLocationController {
+
     private final MemberLocationService memberLocationService;
 
     public MemberLocationController(MemberLocationService memberLocationService) {
@@ -63,15 +66,15 @@ public class MemberLocationController {
             @RequestParam("radius") double radius
     ) {
         List<MemberLocation> allMemberLocations = memberLocationService.getAllMemberLocations();
-        
+
         // Calculate distances and filter users within specified radius
         List<MemberLocation> nearestMemberLocations = allMemberLocations.stream()
-            .filter(memberLocation -> calculateDistance(latitude, longitude, memberLocation.getLatitude(), memberLocation.getLongitude()) <= radius)
-            .collect(Collectors.toList());
-        
+                .filter(memberLocation -> calculateDistance(latitude, longitude, memberLocation.getLatitude(), memberLocation.getLongitude()) <= radius)
+                .collect(Collectors.toList());
+
         // Sort the nearest locations based on distance in ascending order
         nearestMemberLocations.sort(Comparator.comparingDouble(memberLocation -> calculateDistance(latitude, longitude, memberLocation.getLatitude(), memberLocation.getLongitude())));
-        
+
         return ResponseEntity.ok(nearestMemberLocations);
     }
 

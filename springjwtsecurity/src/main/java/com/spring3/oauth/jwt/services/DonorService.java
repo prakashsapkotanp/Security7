@@ -28,6 +28,7 @@ public class DonorService {
     public DonorInfo saveDonorInfo(DonorInfo donorInfo) {
         return donorRepository.save(donorInfo);
     }
+
     public DonorInfo updateDonorInfo(Long id, DonorInfo donorInfo) {
         DonorInfo existingDonorInfo = donorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Donor not found with id: " + id));

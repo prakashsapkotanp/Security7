@@ -1,17 +1,16 @@
 package com.spring3.oauth.jwt.services;
 
+import com.spring3.oauth.jwt.models.MemberInfo;
+import com.spring3.oauth.jwt.repositories.MemberRepository;
+import org.springframework.stereotype.Service;
+
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.stereotype.Service;
-
-import com.spring3.oauth.jwt.models.MemberInfo;
-import com.spring3.oauth.jwt.repositories.MemberRepository;
-
 @Service
 public class MemberService {
-      private final MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
@@ -37,7 +36,6 @@ public class MemberService {
         return memberRepository.findByMiddlename(middlename);
     }
 
-
     public List<MemberInfo> searchByBloodGroup(String bloodGroup) {
         return memberRepository.findByBloodGroup(bloodGroup);
     }
@@ -57,6 +55,7 @@ public class MemberService {
     public void deleteMember(Long memberId) {
         memberRepository.deleteById(memberId);
     }
+
     public MemberInfo updateMember(Long id, MemberInfo memberInfo) {
         MemberInfo existingMember = memberRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Member not found with id: " + id));
@@ -70,7 +69,12 @@ public class MemberService {
         existingMember.setLastTimeOfDonation(memberInfo.getLastTimeOfDonation());
         existingMember.setRegistrationDate(memberInfo.getRegistrationDate());
         existingMember.setUserInfo(memberInfo.getUserInfo());
+        existingMember.setMemberLocation(memberInfo.getMemberLocation());
 
         return memberRepository.save(existingMember);
+    }
+
+    public List<MemberInfo> findPotentialDonors(String bloodGroup, double latitude, double longitude, double radius) {
+        return memberRepository.findByBloodGroupAndLocation(bloodGroup, latitude, longitude, radius);
     }
 }

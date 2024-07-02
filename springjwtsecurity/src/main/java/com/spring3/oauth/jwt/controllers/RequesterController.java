@@ -3,15 +3,10 @@ package com.spring3.oauth.jwt.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.spring3.oauth.jwt.models.RequesterInfo;
 import com.spring3.oauth.jwt.services.RequesterService;
@@ -56,6 +51,20 @@ public class RequesterController {
     public ResponseEntity<RequesterInfo> saveRequester(@RequestBody RequesterInfo requesterInfo) {
         RequesterInfo savedRequester = requesterService.saveRequester(requesterInfo);
         return new ResponseEntity<>(savedRequester, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<RequesterInfo> updateRequester(@PathVariable Long id, @RequestBody RequesterInfo requesterInfoToUpdate) {
+        Optional<RequesterInfo> existingRequester = requesterService.getRequesterById(id);
+        if (existingRequester.isPresent()) {
+            RequesterInfo currentRequester = existingRequester.get();
+            // Copy new data to the existing entity
+            BeanUtils.copyProperties(requesterInfoToUpdate, currentRequester, "id");
+            RequesterInfo updatedRequester = requesterService.saveRequester(currentRequester);
+            return new ResponseEntity<>(updatedRequester, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/{id}")
