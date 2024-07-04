@@ -1,5 +1,7 @@
 package com.spring3.oauth.jwt.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +23,7 @@ public class Request {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "requester_id")
+    @JsonManagedReference
     private RequesterInfo requester;
 
     private double currentLatitude;
@@ -31,5 +34,6 @@ public class Request {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "donor_id")
+    @JsonIgnore
     private DonorInfo donorInfo;
 }
