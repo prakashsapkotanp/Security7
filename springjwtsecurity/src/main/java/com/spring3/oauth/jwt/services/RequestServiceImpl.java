@@ -3,7 +3,6 @@ package com.spring3.oauth.jwt.services;
 import com.spring3.oauth.jwt.models.DonorInfo;
 import com.spring3.oauth.jwt.models.MemberInfo;
 import com.spring3.oauth.jwt.models.Request;
-import com.spring3.oauth.jwt.models.RequesterInfo;
 import com.spring3.oauth.jwt.repositories.DonorRepository;
 import com.spring3.oauth.jwt.repositories.MemberRepository;
 import com.spring3.oauth.jwt.repositories.RequestRepository;
@@ -96,6 +95,12 @@ public class RequestServiceImpl implements RequestService {
     @Transactional(readOnly = true)
     public List<Request> getAllRequests() {
         return requestRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Request> getSentRequestsByMemberId(Long memberId) {
+        return requestRepository.findByRequesterId(memberId);
     }
 
     private boolean checkRequestFulfilled(Request request) {

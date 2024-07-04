@@ -10,4 +10,5 @@ public interface RequestService {
     void createRequest(Request request);
     List<Request> getRequestsByMemberId(Long memberId);
     List<Request> getAllRequests();
+    List<Request> getSentRequestsByMemberId(Long memberId);
 }

@@ -25,4 +25,6 @@ public interface MemberRepository extends JpaRepository<MemberInfo, Long> {
                                                  @Param("latitude") double latitude,
                                                  @Param("longitude") double longitude,
                                                  @Param("radius") double radius);
+
+
 }

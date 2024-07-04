@@ -1,6 +1,7 @@
 package com.spring3.oauth.jwt.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,5 +39,6 @@ public class DonorInfo {
     private MemberLocation memberLocation;
 
     @OneToMany(mappedBy = "donorInfo", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Request> requests;
 }
