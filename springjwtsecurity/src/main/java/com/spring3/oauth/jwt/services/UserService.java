@@ -29,6 +29,6 @@ public interface UserService {
     UserDetails loadUserByUsername(String username);
     public Set<String> getUserRoleByUsername(String username);
 
-  //  List<UserInfo> findAllWithRoles(); // get all users with roles
-  public List<UserInfo> getAll();
+    //  List<UserInfo> findAllWithRoles(); // get all users with roles
+    public List<UserInfo> getAll();
 }
