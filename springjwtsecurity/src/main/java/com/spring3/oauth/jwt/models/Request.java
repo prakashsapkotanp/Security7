@@ -34,6 +34,14 @@ public class Request {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "donor_id")
-    @JsonIgnore
     private DonorInfo donorInfo;
+
+    public Request(RequesterInfo requester, DonorInfo donorInfo, double currentLatitude, double currentLongitude, LocalDateTime now, int totalPintsDonated) {
+        this.requester = requester;
+        this.donorInfo = donorInfo;
+        this.currentLatitude = currentLatitude;
+        this.currentLongitude = currentLongitude;
+        this.createdAt = now;
+        this.totalPintsDonated = totalPintsDonated;
+    }
 }
