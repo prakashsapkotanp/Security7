@@ -1,7 +1,9 @@
 package com.spring3.oauth.jwt.repositories;
 
 import com.spring3.oauth.jwt.models.MemberInfo;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -13,10 +15,15 @@ import java.util.List;
 public interface MemberRepository extends JpaRepository<MemberInfo, Long> {
 
     List<MemberInfo> findByFirstname(String firstname);
+
     List<MemberInfo> findByLastname(String lastname);
+
     List<MemberInfo> findByMiddlename(String middlename);
+
     List<MemberInfo> findByBloodGroup(String bloodGroup);
+
     List<MemberInfo> findByGender(String gender);
+
     List<MemberInfo> findByDateOfBirth(Date dateOfBirth);
 
     @Query("SELECT m FROM MemberInfo m JOIN m.memberLocation ml WHERE m.bloodGroup = :bloodGroup AND " +
@@ -26,5 +33,9 @@ public interface MemberRepository extends JpaRepository<MemberInfo, Long> {
                                                  @Param("longitude") double longitude,
                                                  @Param("radius") double radius);
 
-
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE members set user_id = ?1 where id = ?2", nativeQuery = true)
+    public void setUserId(Long userId, Long id);
 }
+

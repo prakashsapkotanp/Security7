@@ -129,6 +129,10 @@ public class UserController {
     public String test() {
         return "Welcome";
     }
+    @GetMapping("/getId/{phone_no}")
+    public int getUserId(@PathVariable String phone_no) {
+        return userRepository.findUserByUsername(phone_no);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateAndGetToken(@RequestBody AuthRequestDTO authRequestDTO) {

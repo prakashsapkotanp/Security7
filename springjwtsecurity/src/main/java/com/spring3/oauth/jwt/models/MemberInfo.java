@@ -33,7 +33,7 @@ public class MemberInfo {
     private Date lastTimeOfDonation;
     private Date registrationDate;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private UserInfo userInfo;
 

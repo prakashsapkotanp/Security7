@@ -1,6 +1,7 @@
 package com.spring3.oauth.jwt.controllers;
 
 import com.spring3.oauth.jwt.models.MemberInfo;
+import com.spring3.oauth.jwt.repositories.MemberRepository;
 import com.spring3.oauth.jwt.services.MemberService;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,9 +13,11 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
-    public MemberController(MemberService memberService) {
+    public MemberController(MemberService memberService, MemberRepository memberRepository) {
         this.memberService = memberService;
+        this.memberRepository = memberRepository;
     }
 
     @GetMapping
@@ -22,6 +25,13 @@ public class MemberController {
     	System.out.println(memberService.getAllMembers());
         return memberService.getAllMembers();
     }
+    @PostMapping("setUserId/{memberId}/{userId}")
+    public String setUserId(@PathVariable("memberId") Long memberId, @PathVariable("userId") Long userId) {
+     memberRepository.setUserId(userId,memberId);
+     return "success";
+    }
+
+
 
     @GetMapping("/{id}")
     public MemberInfo getMemberById(@PathVariable Long id) {
