@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7bba4686-5003-44c2-b66d-79176773fd1e" name="Changes" comment="nested request sent to member, memberlocation" />
+    <list default="true" id="7bba4686-5003-44c2-b66d-79176773fd1e" name="Changes" comment="nested request sent to member, memberlocation">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/configurations/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/configurations/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/RequesterInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/RequesterInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/configurations/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/configurations/SecurityConfig.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -150,7 +155,7 @@
       <workItem from="1721660374918" duration="2484000" />
       <workItem from="1721697980102" duration="2052000" />
       <workItem from="1721742626448" duration="3888000" />
-      <workItem from="1721749667318" duration="5450000" />
+      <workItem from="1721749667318" duration="8490000" />
     </task>
     <task id="LOCAL-00001" summary="signup added and token generated">
       <option name="closed" value="true" />

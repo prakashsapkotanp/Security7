@@ -19,15 +19,16 @@ public class RequesterInfo {
     private Long id;
     private String bloodGroup;
     private int pints;
+    private Long phone;
     private double latitude;
     private double longitude;
     private String name;
   //  @OneToOne(cascade = CascadeType.ALL)
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private UserInfo userInfo;
 //    @OneToOne(cascade = CascadeType.ALL)
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
     @JoinColumn(name = "locationID", referencedColumnName = "id")
     private MemberLocation memberLocation;
 }
