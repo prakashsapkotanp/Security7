@@ -43,7 +43,6 @@ public class RequestServiceImpl implements RequestService {
             for (MemberInfo donor : potentialDonors) {
                 notificationService.sendRequestNotification(donor, request);
             }
-
             requestFulfilled = checkRequestFulfilled(request);
 
             if (!requestFulfilled) {

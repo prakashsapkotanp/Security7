@@ -25,15 +25,13 @@ public class Request {
     @JoinColumn(name = "requester_id")
     @JsonManagedReference
     private RequesterInfo requester;
-
     private double currentLatitude;
     private double currentLongitude;
     private LocalDateTime createdAt;
     private boolean disabled = false;
     private int totalPintsDonated = 0;
-
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "donor_id")
+    @JoinColumn(name = "donor_id", nullable = true)
     @JsonIgnore
     private DonorInfo donorInfo;
 }
