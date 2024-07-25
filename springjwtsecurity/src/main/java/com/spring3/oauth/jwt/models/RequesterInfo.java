@@ -22,12 +22,20 @@ public class RequesterInfo {
     private double latitude;
     private double longitude;
     private String name;
-  //  @OneToOne(cascade = CascadeType.ALL)
-    @OneToOne(fetch = FetchType.EAGER)
+//  //  @OneToOne(cascade = CascadeType.ALL)
+//    @OneToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "userId", referencedColumnName = "id")
+//    private UserInfo userInfo;
+////    @OneToOne(cascade = CascadeType.ALL)
+//    @OneToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "locationID", referencedColumnName = "id")
+//    private MemberLocation memberLocation;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private UserInfo userInfo;
-//    @OneToOne(cascade = CascadeType.ALL)
-    @OneToOne(fetch = FetchType.EAGER)
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "locationID", referencedColumnName = "id")
     private MemberLocation memberLocation;
 }

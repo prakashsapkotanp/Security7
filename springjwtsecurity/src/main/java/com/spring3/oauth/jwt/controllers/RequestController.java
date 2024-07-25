@@ -71,12 +71,10 @@ public class RequestController {
     @PostMapping("/create")
     public ResponseEntity<String> createRequest(@RequestBody RequestDTO requestDTO) {
         Optional<RequesterInfo> requesterInfo = requesterService.getRequesterById(requestDTO.getRequesterId());
-        Optional<DonorInfo> donorInfo = donorService.getDonorInfoById(requestDTO.getDonorId());
 
-        if(requesterInfo.isPresent()&& donorInfo.isPresent() ) {
+        if(requesterInfo.isPresent()) {
             Request request = new Request(
                     requesterInfo.get(),
-                    donorInfo.get(),
                     requestDTO.getCurrentLatitude(),
                     requestDTO.getCurrentLongitude(),
                     LocalDateTime.now(),

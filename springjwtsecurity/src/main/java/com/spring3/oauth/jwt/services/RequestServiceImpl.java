@@ -66,7 +66,7 @@ public class RequestServiceImpl implements RequestService {
             DonorInfo donorInfo = donorRepository.findById(donorId)
                     .orElseThrow(() -> new RuntimeException("Donor not found"));
 
-            request.setDonorInfo(donorInfo);
+           request.setDonorInfo(donorInfo);
             request.setTotalPintsDonated(request.getTotalPintsDonated() + 1);
 
             if (checkRequestFulfilled(request)) {
