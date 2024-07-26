@@ -46,13 +46,11 @@ public class RequesterController {
     public List<RequesterInfo> getRequestersByPhone(@PathVariable String name) {
         return requesterService.getRequestersByName(name);
     }
-
     @PostMapping
     public ResponseEntity<RequesterInfo> saveRequester(@RequestBody RequesterInfo requesterInfo) {
         RequesterInfo savedRequester = requesterService.saveRequester(requesterInfo);
         return new ResponseEntity<>(savedRequester, HttpStatus.CREATED);
     }
-
     @PutMapping("/{id}")
     public ResponseEntity<RequesterInfo> updateRequester(@PathVariable Long id, @RequestBody RequesterInfo requesterInfoToUpdate) {
         Optional<RequesterInfo> existingRequester = requesterService.getRequesterById(id);
