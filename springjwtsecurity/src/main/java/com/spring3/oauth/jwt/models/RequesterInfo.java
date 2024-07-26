@@ -22,12 +22,13 @@ public class RequesterInfo {
     private double latitude;
     private double longitude;
     private String name;
+    private String phone;
   //  @OneToOne(cascade = CascadeType.ALL)
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private UserInfo userInfo;
 //    @OneToOne(cascade = CascadeType.ALL)
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "locationID", referencedColumnName = "id")
     private MemberLocation memberLocation;
 }
