@@ -20,6 +20,8 @@ public interface UserRepository extends JpaRepository<UserInfo, Long> {
     void refresh(UserInfo userInfo);
     @Query("SELECT ur FROM UserInfo u JOIN u.roles ur WHERE u.username = :username")
     Set<UserRole> findRolesByUsername(@Param("username") String username);
+    @Query("SELECT id FROM UserInfo WHERE username = :username")
+    int findUserByUsername(@Param("username") String username);
 
 
 }
