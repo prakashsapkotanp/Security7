@@ -31,4 +31,18 @@ public class RequesterInfo {
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "locationID", referencedColumnName = "id")
     private MemberLocation memberLocation;
+
+    public String getBloodGroup(){
+        return bloodGroup;
+    }
+    public double getLatitude(){
+        return latitude;
+    }
+    public double getLongitude(){
+        return longitude;
+    }
+    public int getPints(){
+        return pints;
+    }
+
 }

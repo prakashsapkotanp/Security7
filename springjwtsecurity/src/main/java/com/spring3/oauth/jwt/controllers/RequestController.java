@@ -36,12 +36,12 @@ public class RequestController {
     /**
      * Endpoint to send a request by its ID.
      *
-     * @param requestId ID of the request to be sent.
+     * @param requesterId ID of the request to be sent.
      * @return Response indicating the success or failure of the operation.
      */
-    @PostMapping("/send/{requestId}")
-    public ResponseEntity<String> sendRequest(@PathVariable Long requestId) {
-        requestService.sendRequest(requestId);
+    @PostMapping("/send/{requesterId}")
+    public ResponseEntity<String> sendRequest(@PathVariable Long requesterId) {
+        requestService.sendRequest(requesterId);
         return ResponseEntity.ok("Request sent successfully");
     }
 
@@ -68,27 +68,27 @@ public class RequestController {
      * @return Response indicating the success or failure of the operation.
      */
 
-    @PostMapping("/create")
-    public ResponseEntity<String> createRequest(@RequestBody RequestDTO requestDTO) {
-        Optional<RequesterInfo> requesterInfo = requesterService.getRequesterById(requestDTO.getRequesterId());
-        Optional<DonorInfo> donorInfo = donorService.getDonorInfoById(requestDTO.getDonorId());
-
-        if(requesterInfo.isPresent()&& donorInfo.isPresent() ) {
-            Request request = new Request(
-                    requesterInfo.get(),
-                    donorInfo.get(),
-                    requestDTO.getCurrentLatitude(),
-                    requestDTO.getCurrentLongitude(),
-                    LocalDateTime.now(),
-                    requestDTO.getTotalPintsDonated()
-
-
-            );
-            requestService.createRequest(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Request created successfully");
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Request failed to send");
-    }
+//    @PostMapping("/create")
+//    public ResponseEntity<String> createRequest(@RequestBody RequestDTO requestDTO) {
+//        Optional<RequesterInfo> requesterInfo = requesterService.getRequesterById(requestDTO.getRequesterId());
+//        Optional<DonorInfo> donorInfo = donorService.getDonorInfoById(requestDTO.getDonorId());
+//
+//        if(requesterInfo.isPresent()&& donorInfo.isPresent() ) {
+//            Request request = new Request(
+//                    requesterInfo.get(),
+//                    donorInfo.get(),
+//                    requestDTO.getCurrentLatitude(),
+//                    requestDTO.getCurrentLongitude(),
+//                    LocalDateTime.now(),
+//                    requestDTO.getTotalPintsDonated()
+//
+//
+//            );
+//            requestService.createRequest(request);
+//            return ResponseEntity.status(HttpStatus.CREATED).body("Request created successfully");
+//        }
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Request failed to send");
+//    }
 
     /**
      * Endpoint to get all requests associated with a specific member.

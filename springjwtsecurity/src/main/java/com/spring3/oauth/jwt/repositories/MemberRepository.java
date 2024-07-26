@@ -37,4 +37,12 @@ public interface MemberRepository extends JpaRepository<MemberInfo, Long> {
     @Transactional
     @Query(value = "UPDATE members set user_id = ?1 where id = ?2", nativeQuery = true)
     public void setUserId(Long userId, Long id);
+
+    @Query(value = "SELECT longitude from member_location where id in(select location_id from members where id = ?1)", nativeQuery = true)
+    public Double getlat(Long locationId);
+
+    @Query(value = "SELECT latitude from member_location where id in(select location_id from members where id = ?1)", nativeQuery = true)
+    public Double getlon(Long locationId);
+
+
 }

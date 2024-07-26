@@ -22,23 +22,23 @@ public class DonorInfo {
     @Column(name = "ID")
     private Long id;
 
-    private boolean status;
+    private boolean status = true;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", referencedColumnName = "id")
     private MemberInfo memberInfo;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requester_id", referencedColumnName = "id")
-    @JsonIgnore
+//    @JsonIgnore
     private RequesterInfo requesterInfo;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id", referencedColumnName = "id")
-    @JsonIgnore
+//    @JsonIgnore
     private MemberLocation memberLocation;
 
     @OneToMany(mappedBy = "donorInfo", cascade = CascadeType.ALL)
-    @JsonManagedReference
+//    @JsonManagedReference
     private List<Request> requests;
 }
