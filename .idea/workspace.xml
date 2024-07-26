@@ -4,16 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7bba4686-5003-44c2-b66d-79176773fd1e" name="Changes" comment="">
+    <list default="true" id="7bba4686-5003-44c2-b66d-79176773fd1e" name="Changes" comment="request function fixed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/controllers/RequestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/controllers/RequestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/dtos/RequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/dtos/RequestDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/Request.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/RequesterInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/RequesterInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/RequestRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/RequestRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/RequesterRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/RequesterRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/RequestServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/services/RequestServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/RequesterInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/target/classes/com/spring3/oauth/jwt/models/RequesterInfo.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,7 +149,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715096810723</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="request function fixed">
+      <option name="closed" value="true" />
+      <created>1721920691547</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1721920691547</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -191,7 +191,8 @@
     <MESSAGE value="signup added and token generated" />
     <MESSAGE value="error response dto added" />
     <MESSAGE value="comit to pull" />
-    <option name="LAST_COMMIT_MESSAGE" value="comit to pull" />
+    <MESSAGE value="request function fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="request function fixed" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/backend$OauthJwtApplication.ic" NAME="OauthJwtApplication Coverage Results" MODIFIED="1719722103490" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
