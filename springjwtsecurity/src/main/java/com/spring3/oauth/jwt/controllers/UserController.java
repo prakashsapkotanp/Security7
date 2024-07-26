@@ -90,11 +90,11 @@ public class UserController {
             String user2 = resp.get(resp.size()-1).getUsername();
 
             Set<UserRole> rs=userRepository.findRolesByUsername(user1);
-             //  System.out.println(info.getUsername());
-                for(UserRole r:rs){
-                    resp.get(0).getRoles().add(r);
-                   System.out.println(r.getRoleName());
-              }
+            //  System.out.println(info.getUsername());
+            for(UserRole r:rs){
+                resp.get(0).getRoles().add(r);
+                System.out.println(r.getRoleName());
+            }
 
             Set<UserRole> rs2=userRepository.findRolesByUsername(user2);
             //  System.out.println(info.getUsername());
@@ -128,6 +128,10 @@ public class UserController {
     @GetMapping("/test")
     public String test() {
         return "Welcome";
+    }
+    @GetMapping("/getId/{phone_no}")
+    public int getUserId(@PathVariable String phone_no) {
+        return userRepository.findUserByUsername(phone_no);
     }
 
     @PostMapping("/login")

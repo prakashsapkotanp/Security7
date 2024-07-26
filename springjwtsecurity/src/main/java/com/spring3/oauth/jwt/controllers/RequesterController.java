@@ -72,5 +72,5 @@ public class RequesterController {
         requesterService.deleteRequester(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    
+
 }

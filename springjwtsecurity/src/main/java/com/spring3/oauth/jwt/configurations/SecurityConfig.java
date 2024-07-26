@@ -31,15 +31,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .requestMatchers("/api/v1/user/login", "/api/v1/user/signup", "/api/v1/refreshToken").permitAll()
+                .requestMatchers("/api/v1/user/login", "/api/v1/user/signup", "/api/v1/refreshToken","/api/v1/user/getId/{phone_no}").permitAll()
 //                .requestMatchers("/api/v1/**").authenticated()
-                .requestMatchers("/api/v1/user/profile","/api/v1/members").hasAuthority("ROLE_USER") // Allow access to ROLE_USER
-                .requestMatchers("/api/v1/**","/api/v1/members").hasAuthority("ROLE_ADMIN") // Allow access to ROLE_ADMIN
+                .requestMatchers("/api/v1/user/profile", "api/v1/members","api/v1/user/users","api/v1/requesters", "api/v1/member-locations", "api/v1/requesters","/api/v1/user/getId/*","/api/v1/members/setUserId/{memberId}/{userId}").hasAuthority("ROLE_USER") // Allow access to ROLE_USER
+                .requestMatchers("/api/v1/**").hasAuthority("ROLE_ADMIN") // Allow access to ROLE_ADMIN
                 .and()
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
