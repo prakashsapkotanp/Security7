@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7bba4686-5003-44c2-b66d-79176773fd1e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/MemberRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/repositories/MemberRepository.java" afterDir="false" />
-    </list>
+    <list default="true" id="7bba4686-5003-44c2-b66d-79176773fd1e" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -150,7 +147,7 @@
       <workItem from="1717401468878" duration="72000" />
       <workItem from="1717401559233" duration="28000" />
       <workItem from="1721962341923" duration="121000" />
-      <workItem from="1721962471831" duration="6474000" />
+      <workItem from="1721962471831" duration="6831000" />
     </task>
     <task id="LOCAL-00001" summary="signup added and token generated">
       <option name="closed" value="true" />

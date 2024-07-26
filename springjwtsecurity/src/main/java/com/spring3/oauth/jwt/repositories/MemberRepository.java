@@ -26,7 +26,7 @@ public interface MemberRepository extends JpaRepository<MemberInfo, Long> {
 
     List<MemberInfo> findByDateOfBirth(Date dateOfBirth);
 
-    @Query(value = "SELECT * FROM members m JOIN member_location ml ON m.location_id = ml.id WHERE m.blood_group = :bloodGroup AND \n" +
+    @Query(value = "SELECT m.id,m.blood_group, m.date_of_birth,m.firstname, m.gender, m.last_time_of_donation,m.lastname,m.middlename,m.registration_date,m.location_id, m.user_id  FROM members m JOIN member_location ml ON m.location_id = ml.id WHERE m.blood_group = :bloodGroup AND \n" +
             "            6371 * acos(cos(radians(:latitude)) * cos(radians(ml.latitude)) * cos(radians(:longitude) - radians(80.621591)) + sin(radians(:latitude)) * sin(radians(ml.latitude))) <= :radius", nativeQuery = true)
     List<MemberInfo> findByBloodGroupAndLocation(@Param("bloodGroup") String bloodGroup,
                                                  @Param("latitude") double latitude,
