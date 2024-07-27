@@ -25,11 +25,25 @@ public class RequesterInfo {
     private double phone;
     private String name;
   //  @OneToOne(cascade = CascadeType.ALL)
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private UserInfo userInfo;
 //    @OneToOne(cascade = CascadeType.ALL)
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "locationID", referencedColumnName = "id")
     private MemberLocation memberLocation;
+
+    public String getBloodGroup(){
+        return bloodGroup;
+    }
+    public double getLatitude(){
+        return latitude;
+    }
+    public double getLongitude(){
+        return longitude;
+    }
+    public int getPints(){
+        return pints;
+    }
+
 }

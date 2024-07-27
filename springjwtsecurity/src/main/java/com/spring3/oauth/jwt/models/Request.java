@@ -31,7 +31,6 @@ public class Request {
     private LocalDateTime createdAt;
     private boolean disabled = false;
     private int totalPintsDonated = 0;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "donor_id")
     private DonorInfo donorInfo;
