@@ -3,6 +3,7 @@ package com.spring3.oauth.jwt.controllers;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.spring3.oauth.jwt.dtos.RequestDTO;
 import com.spring3.oauth.jwt.models.DonorInfo;
+import com.spring3.oauth.jwt.models.MemberInfo;
 import com.spring3.oauth.jwt.models.Request;
 import com.spring3.oauth.jwt.models.RequesterInfo;
 import com.spring3.oauth.jwt.repositories.RequestRepository;
@@ -43,9 +44,10 @@ public class RequestController {
      * @return Response indicating the success or failure of the operation.
      */
     @PostMapping("/send/{requesterId}")
-    public ResponseEntity<String> sendRequest(@PathVariable Long requesterId) {
+    public MemberInfo sendRequest(@PathVariable Long requesterId) {
         requestService.sendRequest(requesterId);
-        return ResponseEntity.ok("Request sent successfully");
+        MemberInfo memberInfo = new MemberInfo();
+        return memberInfo;
     }
 
     /**

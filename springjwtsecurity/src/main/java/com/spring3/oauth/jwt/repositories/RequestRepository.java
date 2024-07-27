@@ -15,7 +15,7 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     List<Request> findByRequesterId(Long requesterId);
     @Transactional
     @Modifying
-    @Query(value = "insert into tbl_request (current_latitude,current_longitude,disabled,total_pints_donated,donor_id,requester_id) values (?4,?5,1,?3,?2,?1)",nativeQuery = true)
+    @Query(value = "insert into tbl_request (current_latitude,current_longitude,disabled,total_pints_donated,donor_id,requester_id,created_at) values (?4,?5,1,?3,?2,?1,now(6))",nativeQuery = true)
     public void insert(Long requesterId,Long donorId,int pints, double lat, double lng);
     @Query(value = "select * from tbl_request", nativeQuery = true)
     public List<Request> manualFindAll();
