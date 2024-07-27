@@ -21,7 +21,7 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requester_id")
     @JsonManagedReference
     private RequesterInfo requester;
@@ -31,7 +31,7 @@ public class Request {
     private LocalDateTime createdAt = LocalDateTime.now();
     private boolean disabled = false;
     private int totalPintsDonated = 0;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "donor_id")
     private DonorInfo donorInfo;
 

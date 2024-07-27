@@ -34,9 +34,11 @@ public class DonorController {
     }
 
     @PostMapping
-    public ResponseEntity<DonorInfo> saveDonorInfo(@RequestBody DonorInfo donorInfo) {
-        DonorInfo savedDonorInfo = donorService.saveDonorInfo(donorInfo);
-        return new ResponseEntity<>(savedDonorInfo, HttpStatus.CREATED);
+    public ResponseEntity<DonorInfo> saveDonorInfo(@RequestBody Long s) {
+        DonorInfo donorInfo = new DonorInfo();
+        donorInfo.setId(s);
+
+        return new ResponseEntity<>(donorInfo, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
     public ResponseEntity<DonorInfo> updateDonorInfo(@PathVariable Long id, @RequestBody DonorInfo donorInfo) {

@@ -5,6 +5,7 @@ import com.spring3.oauth.jwt.dtos.RequestDTO;
 import com.spring3.oauth.jwt.models.DonorInfo;
 import com.spring3.oauth.jwt.models.Request;
 import com.spring3.oauth.jwt.models.RequesterInfo;
+import com.spring3.oauth.jwt.repositories.RequestRepository;
 import com.spring3.oauth.jwt.services.DonorService;
 import com.spring3.oauth.jwt.services.RequestService;
 import com.spring3.oauth.jwt.services.RequesterService;
@@ -32,6 +33,8 @@ public class RequestController {
     private RequesterService requesterService;
     @Autowired
     private DonorService donorService;
+    @Autowired
+    private RequestRepository requestRepository;
 
     /**
      * Endpoint to send a request by its ID.
@@ -108,8 +111,8 @@ public class RequestController {
      * @return List of all requests.
      */
     @GetMapping
-    public ResponseEntity<List<Request>> getAllRequests() {
-        List<Request> requests = requestService.getAllRequests();
+    public ResponseEntity<List<Request>> getMannualquests() {
+        List<Request> requests = requestRepository.manualFindAll();
         return ResponseEntity.ok(requests);
     }
 
