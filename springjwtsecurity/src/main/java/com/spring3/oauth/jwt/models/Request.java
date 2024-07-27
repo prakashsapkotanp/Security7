@@ -36,9 +36,8 @@ public class Request {
     @JoinColumn(name = "donor_id")
     private DonorInfo donorInfo;
 
-    public Request(RequesterInfo requester, DonorInfo donorInfo, double currentLatitude, double currentLongitude, LocalDateTime now, int totalPintsDonated) {
+    public Request(RequesterInfo requester, double currentLatitude, double currentLongitude, LocalDateTime now, int totalPintsDonated) {
         this.requester = requester;
-        this.donorInfo = donorInfo;
         this.currentLatitude = currentLatitude;
         this.currentLongitude = currentLongitude;
         this.createdAt = now;
