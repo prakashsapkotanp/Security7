@@ -3,6 +3,7 @@ package com.spring3.oauth.jwt.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import com.spring3.oauth.jwt.repositories.DonorRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +16,11 @@ import com.spring3.oauth.jwt.services.DonorService;
 public class DonorController {
     
     private final DonorService donorService;
+    private final DonorRepository donorRepository;
 
-    public DonorController(DonorService donorService) {
+    public DonorController(DonorService donorService, DonorRepository donorRepository) {
         this.donorService = donorService;
+        this.donorRepository = donorRepository;
     }
 
     @GetMapping
@@ -33,11 +36,12 @@ public class DonorController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping
-    public ResponseEntity<DonorInfo> saveDonorInfo(@RequestBody Long s) {
+    @PostMapping("/{donorId}")
+    public ResponseEntity<DonorInfo> saveDonorInfo(@PathVariable Long donorId) {
         DonorInfo donorInfo = new DonorInfo();
-        donorInfo.setId(s);
-
+        donorInfo.setId(donorId);
+        donorRepository.save(donorInfo);
+        System.out.println("donor is set");
         return new ResponseEntity<>(donorInfo, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
