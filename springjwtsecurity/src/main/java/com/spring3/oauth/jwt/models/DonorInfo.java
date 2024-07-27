@@ -36,7 +36,7 @@ public class DonorInfo {
     @JsonIgnore
     private MemberLocation memberLocation;
 
-    @OneToMany(mappedBy = "donorInfo", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<Request> requests;
+//    @OneToMany(mappedBy = "donorInfo", cascade = CascadeType.DETACH)
+//    @JsonManagedReference
+//    private List<Request> requests;
 }
