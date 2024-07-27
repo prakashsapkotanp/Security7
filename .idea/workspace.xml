@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="7bba4686-5003-44c2-b66d-79176773fd1e" name="Changes" comment="Babal">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/DonorInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/DonorInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/models/Request.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/configurations/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/configurations/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/controllers/RequestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/springjwtsecurity/src/main/java/com/spring3/oauth/jwt/controllers/RequestController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,7 +155,7 @@
       <workItem from="1722049493683" duration="82000" />
       <workItem from="1722049601432" duration="9082000" />
       <workItem from="1722061201650" duration="285000" />
-      <workItem from="1722066165727" duration="1408000" />
+      <workItem from="1722066165727" duration="6286000" />
     </task>
     <task id="LOCAL-00001" summary="signup added and token generated">
       <option name="closed" value="true" />

@@ -117,6 +117,11 @@ public class RequestController {
         List<Request> requests = requestRepository.manualFindAll();
         return ResponseEntity.ok(requests);
     }
+    @GetMapping("/getRequestByRequesterId/{requesterId}")
+    public ResponseEntity<List<Request>> getMannuaRequestByRequesterId(@PathVariable Long requesterId) {
+        List<Request> requests = requestRepository.findByRequesterId(requesterId);
+        return ResponseEntity.ok(requests);
+    }
 
     /**
      * Endpoint to get all requests sent by a specific member.
