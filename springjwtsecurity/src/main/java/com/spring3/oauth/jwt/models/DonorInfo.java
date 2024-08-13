@@ -18,27 +18,24 @@ import java.util.List;
 @Table(name = "DONOR")
 public class DonorInfo {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
-
-    private boolean status;
-
-    @OneToOne(fetch = FetchType.EAGER)
+    private boolean status = true;
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", referencedColumnName = "id")
     private MemberInfo memberInfo;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requester_id", referencedColumnName = "id")
     @JsonIgnore
     private RequesterInfo requesterInfo;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     @JsonIgnore
     private MemberLocation memberLocation;
 
-    @OneToMany(mappedBy = "donorInfo", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<Request> requests;
+//    @OneToMany(mappedBy = "donorInfo", cascade = CascadeType.DETACH)
+//    @JsonManagedReference
+//    private List<Request> requests;
 }

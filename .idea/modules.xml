@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Security7.iml" filepath="$PROJECT_DIR$/.idea/Security7.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springjwtsecurity/oauth-jwt.iml" filepath="$PROJECT_DIR$/springjwtsecurity/oauth-jwt.iml" />
     </modules>
   </component>
 </project>

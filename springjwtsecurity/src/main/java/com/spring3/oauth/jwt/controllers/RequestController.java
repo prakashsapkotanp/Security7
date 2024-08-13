@@ -3,8 +3,10 @@ package com.spring3.oauth.jwt.controllers;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.spring3.oauth.jwt.dtos.RequestDTO;
 import com.spring3.oauth.jwt.models.DonorInfo;
+import com.spring3.oauth.jwt.models.MemberInfo;
 import com.spring3.oauth.jwt.models.Request;
 import com.spring3.oauth.jwt.models.RequesterInfo;
+import com.spring3.oauth.jwt.repositories.RequestRepository;
 import com.spring3.oauth.jwt.services.DonorService;
 import com.spring3.oauth.jwt.services.RequestService;
 import com.spring3.oauth.jwt.services.RequesterService;
@@ -32,17 +34,20 @@ public class RequestController {
     private RequesterService requesterService;
     @Autowired
     private DonorService donorService;
+    @Autowired
+    private RequestRepository requestRepository;
 
     /**
      * Endpoint to send a request by its ID.
      *
-     * @param requestId ID of the request to be sent.
+     * @param requesterId ID of the request to be sent.
      * @return Response indicating the success or failure of the operation.
      */
-    @PostMapping("/send/{requestId}")
-    public ResponseEntity<String> sendRequest(@PathVariable Long requestId) {
-        requestService.sendRequest(requestId);
-        return ResponseEntity.ok("Request sent successfully");
+    @PostMapping("/send/{requesterId}")
+    public MemberInfo sendRequest(@PathVariable Long requesterId) {
+        requestService.sendRequest(requesterId);
+        MemberInfo memberInfo = new MemberInfo();
+        return memberInfo;
     }
 
     /**
@@ -61,28 +66,18 @@ public class RequestController {
         return ResponseEntity.ok("Response handled successfully");
     }
 
-    /**
-     * Endpoint to create a new request.
-     *
-     * @param requestDTO The request object to be created.
-     * @return Response indicating the success or failure of the operation.
-     */
-
     @PostMapping("/create")
     public ResponseEntity<String> createRequest(@RequestBody RequestDTO requestDTO) {
         Optional<RequesterInfo> requesterInfo = requesterService.getRequesterById(requestDTO.getRequesterId());
-        Optional<DonorInfo> donorInfo = donorService.getDonorInfoById(requestDTO.getDonorId());
+        // Optional<DonorInfo> donorInfo = donorService.getDonorInfoById(requestDTO.getDonorId());
 
-        if(requesterInfo.isPresent()&& donorInfo.isPresent() ) {
+        if (requesterInfo.isPresent()) {
             Request request = new Request(
                     requesterInfo.get(),
-                    donorInfo.get(),
                     requestDTO.getCurrentLatitude(),
                     requestDTO.getCurrentLongitude(),
                     LocalDateTime.now(),
                     requestDTO.getTotalPintsDonated()
-
-
             );
             requestService.createRequest(request);
             return ResponseEntity.status(HttpStatus.CREATED).body("Request created successfully");
@@ -108,18 +103,17 @@ public class RequestController {
      * @return List of all requests.
      */
     @GetMapping
-    public ResponseEntity<List<Request>> getAllRequests() {
-        List<Request> requests = requestService.getAllRequests();
+    public ResponseEntity<List<Request>> getMannualquests() {
+        List<Request> requests = requestRepository.manualFindAll();
+        return ResponseEntity.ok(requests);
+    }
+    @GetMapping("/getRequestByRequesterId/{requesterId}")
+    public ResponseEntity<List<Request>> getMannuaRequestByRequesterId(@PathVariable Long requesterId) {
+        List<Request> requests = requestRepository.findByRequesterId(requesterId);
         return ResponseEntity.ok(requests);
     }
 
-    /**
-     * Endpoint to get all requests sent by a specific member.
-     *
-     * @param memberId ID of the member.
-     * @return List of requests sent by the member.
-     */
-    @GetMapping("/sent/member/{memberId}")
+    @GetMapping("/sent/{memberId}")
     public ResponseEntity<List<Request>> getSentRequestsByMemberId(@PathVariable Long memberId) {
         List<Request> requests = requestService.getSentRequestsByMemberId(memberId);
         return ResponseEntity.ok(requests);
