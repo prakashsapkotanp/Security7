@@ -49,6 +49,16 @@ public class RequestController {
         MemberInfo memberInfo = new MemberInfo();
         return memberInfo;
     }
+    @PostMapping("/fullFillRequest/{requestId}")
+    public String updateRequestTable(@PathVariable Long requestId) {
+        List<Request> request = requestRepository.findByRequesterId(requestId);
+       if(!request.isEmpty()) {
+           request.get(0).setDisabled(false);
+           request.get(0).setTotalPintsDonated(request.get(0).getTotalPintsDonated()-1);
+           requestRepository.save(request.get(0));
+       }
+        return "success";
+    }
 
     /**
      * Endpoint to handle donor response to a request.
@@ -65,12 +75,10 @@ public class RequestController {
         requestService.handleDonorResponse(requestId, donorId, accepted);
         return ResponseEntity.ok("Response handled successfully");
     }
-
     @PostMapping("/create")
     public ResponseEntity<String> createRequest(@RequestBody RequestDTO requestDTO) {
         Optional<RequesterInfo> requesterInfo = requesterService.getRequesterById(requestDTO.getRequesterId());
         // Optional<DonorInfo> donorInfo = donorService.getDonorInfoById(requestDTO.getDonorId());
-
         if (requesterInfo.isPresent()) {
             Request request = new Request(
                     requesterInfo.get(),

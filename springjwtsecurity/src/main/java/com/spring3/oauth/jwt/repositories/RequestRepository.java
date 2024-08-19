@@ -1,5 +1,6 @@
 package com.spring3.oauth.jwt.repositories;
 
+import com.spring3.oauth.jwt.models.DonorInfo;
 import com.spring3.oauth.jwt.models.MemberInfo;
 import com.spring3.oauth.jwt.models.Request;
 import jakarta.transaction.Transactional;
@@ -8,10 +9,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RequestRepository extends JpaRepository<Request, Long> {
     List<Request> findByRequester(MemberInfo requesterInfo);
-    List<Request> findByDonorInfo(MemberInfo donorInfo);
+    List<Request> findByDonorInfo(Optional<DonorInfo> donorInfo);
     List<Request> findByRequesterId(Long requesterId);
     @Transactional
     @Modifying

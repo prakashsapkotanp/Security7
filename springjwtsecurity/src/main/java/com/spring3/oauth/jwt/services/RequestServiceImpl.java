@@ -37,6 +37,7 @@ public class RequestServiceImpl implements RequestService {
     public void sendRequest(Long requesterId) {
         RequesterInfo requester = requesterRepository.findById(requesterId)
                 .orElseThrow(() -> new EntityNotFoundException("Requester not found with id: " + requesterId));
+        webSocketHandler.sendNotification("Uregent Blood needed " + requester.getBloodGroup() + requester.getName());
 
 
         double currentRadius = 20.0;
@@ -94,14 +95,13 @@ public class RequestServiceImpl implements RequestService {
     public void createRequest(Request request) {
         requestRepository.save(request);
         System.out.println("Request created: " + request);
-        webSocketHandler.sendNotification("Uregent Blood needed for " + request.getId());
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Request> getRequestsByMemberId(Long memberId) {
-        // Implement get requests by member ID logic
-        return null;
+        return requestRepository.findByDonorInfo(donorRepository.findById(memberId));
+
     }
 
     @Override
@@ -113,6 +113,7 @@ public class RequestServiceImpl implements RequestService {
     @Override
     @Transactional(readOnly = true)
     public List<Request> getSentRequestsByMemberId(Long memberId) {
+
         return requestRepository.findByRequesterId(memberId);
     }
 
