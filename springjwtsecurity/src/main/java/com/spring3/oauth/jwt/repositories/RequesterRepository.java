@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.spring3.oauth.jwt.models.RequesterInfo;
@@ -17,4 +18,6 @@ public interface RequesterRepository extends JpaRepository<RequesterInfo,Long> {
     List<RequesterInfo> findByLatitudeAndLongitude(double latitude, double longitude);
 
     List<RequesterInfo> findByName(String name);
+    @Query(value = "select MAX(id) from requester where user_id = ?1", nativeQuery = true)
+    public String gerRequesterIdByUserId(Long userId);
 }

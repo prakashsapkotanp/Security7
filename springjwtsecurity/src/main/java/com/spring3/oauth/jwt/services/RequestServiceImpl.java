@@ -39,7 +39,7 @@ public class RequestServiceImpl implements RequestService {
                 .orElseThrow(() -> new EntityNotFoundException("Requester not found with id: " + requesterId));
 
 
-        double currentRadius = 15.0;
+        double currentRadius = 20.0;
         boolean requestFulfilled = false;
 
       //  while (!requestFulfilled && currentRadius <= 100) {
@@ -54,8 +54,6 @@ public class RequestServiceImpl implements RequestService {
                 Double lat = memberRepository.getlat(donor.getId());
                 Double lng = memberRepository.getlon(donor.getId());
                 requestRepository.insert(requesterId,donorId,pints,lat,lng);
-
-
             }
 
           //  requestFulfilled = checkRequestFulfilled(requester);

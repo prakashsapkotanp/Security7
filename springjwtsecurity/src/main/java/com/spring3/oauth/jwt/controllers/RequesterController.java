@@ -3,6 +3,7 @@ package com.spring3.oauth.jwt.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import com.spring3.oauth.jwt.repositories.RequesterRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,11 @@ import com.spring3.oauth.jwt.services.RequesterService;
 @RequestMapping("/api/v1/requesters")
 public class RequesterController {
     private final RequesterService requesterService;
+    private final RequesterRepository requesterRepository;
 
-    public RequesterController(RequesterService requesterService) {
+    public RequesterController(RequesterService requesterService, RequesterRepository requesterRepository) {
         this.requesterService = requesterService;
+        this.requesterRepository = requesterRepository;
     }
 
     @GetMapping
@@ -25,11 +28,15 @@ public class RequesterController {
         return requesterService.getAllRequesters();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<RequesterInfo> getRequesterById(@PathVariable Long id) {
-        Optional<RequesterInfo> requesterInfo = requesterService.getRequesterById(id);
-        return requesterInfo.map(info -> new ResponseEntity<>(info, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    @GetMapping("/{user_id}")
+    public String getRequesterById(@PathVariable Long user_id) {
+      String requesterId = requesterRepository.gerRequesterIdByUserId(user_id);
+      if(requesterId == null) {
+          return "null";
+      }
+      else {
+          return requesterId;
+      }
     }
 
     @GetMapping("/bloodgroup/{bloodGroup}")
