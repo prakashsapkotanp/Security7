@@ -29,14 +29,18 @@ public class NotificationScheduler {
         try {
             List<Request> requests = requestRepository.findAll();
             for (Request requester : requests) {
+                int remainingPints = requester.getTotalPintsDonated();
+                if(remainingPints>0){
                 DonorInfo donorInfo = requester.getDonorInfo();
                 String memberId = donorInfo.getId().toString();
                 RequesterInfo requesterInfo = requester.getRequester();
                 String name = requesterInfo.getName();
                 String bloodGroup = requesterInfo.getBloodGroup();
+
                 String message = "Urgent " + bloodGroup + " blood needed, " + name;
                 logger.info("Sending notification to {}: {}", name, message);
-                webSocketHandler.sendNotificationToUser(memberId, message);
+
+                webSocketHandler.sendNotificationToUser(memberId, message);}
             }
         } catch (Exception e) {
             logger.error("Error occurred while sending notifications", e);
