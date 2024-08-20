@@ -6,7 +6,10 @@ import com.spring3.oauth.jwt.services.MemberService;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/members")
@@ -78,6 +81,16 @@ public class MemberController {
     public MemberInfo saveMember(@RequestBody MemberInfo memberInfo) {
 
         return memberService.saveMember(memberInfo);
+    }
+    @PostMapping("/updateLastDonatedDate/{memberId}")
+    public String updateLastDonatedDate(@PathVariable Long memberId) {
+        Optional<MemberInfo> memberInfo = memberRepository.findById(memberId);
+        memberInfo.ifPresent(memberInfo1 -> {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            memberInfo1.setLastTimeOfDonation(Date.valueOf(LocalDate.now()));
+            memberRepository.save(memberInfo1);
+        });
+        return "successfully date updated";
     }
 
     @PutMapping("/{id}")
