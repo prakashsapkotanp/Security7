@@ -24,7 +24,7 @@ public class NotificationScheduler {
     @Autowired
     private RequestRepository requestRepository;
 
-    @Scheduled(fixedRate = 6000)
+    @Scheduled(fixedRate = 10000)
     public void sendNotifications() {
         try {
             List<Request> requests = requestRepository.findAll();
@@ -34,7 +34,7 @@ public class NotificationScheduler {
                 RequesterInfo requesterInfo = requester.getRequester();
                 String name = requesterInfo.getName();
                 String bloodGroup = requesterInfo.getBloodGroup();
-                String message = "Urgent " + bloodGroup + " blood needed " + name;
+                String message = "Urgent " + bloodGroup + " blood needed, " + name;
                 logger.info("Sending notification to {}: {}", name, message);
                 webSocketHandler.sendNotificationToUser(memberId, message);
             }
