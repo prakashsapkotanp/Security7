@@ -37,7 +37,7 @@ public class RequestServiceImpl implements RequestService {
     public void sendRequest(Long requesterId) {
         RequesterInfo requester = requesterRepository.findById(requesterId)
                 .orElseThrow(() -> new EntityNotFoundException("Requester not found with id: " + requesterId));
-        webSocketHandler.sendNotification("Uregent Blood needed " + requester.getBloodGroup() + requester.getName());
+
 
 
         double currentRadius = 20.0;
@@ -49,12 +49,11 @@ public class RequestServiceImpl implements RequestService {
 
             for (MemberInfo donor : potentialDonors) {
                 System.out.println(donor.getId());
-               // notificationService.sendRequestNotification(donor, request);
                 Long donorId = donor.getId();
                 int pints = requester.getPints();
                 Double lat = memberRepository.getlat(donor.getId());
                 Double lng = memberRepository.getlon(donor.getId());
-                requestRepository.insert(requesterId,donorId,pints,lat,lng);
+               requestRepository.insert(requesterId,donorId,pints,lat,lng);
             }
 
           //  requestFulfilled = checkRequestFulfilled(requester);

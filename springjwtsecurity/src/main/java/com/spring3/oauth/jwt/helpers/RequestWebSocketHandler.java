@@ -7,18 +7,21 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class RequestWebSocketHandler extends TextWebSocketHandler {
 
-    private final List<WebSocketSession> sessions = new ArrayList<>();
+    // Map to store sessions associated with their MemberIds
+    private final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        sessions.add(session);
-        System.out.println("New WebSocket connection established with session ID: " + session.getId());
+        // Extract MemberId from the session (assuming it's passed as a query parameter)
+        String memberId = session.getUri().getQuery().split("=")[1]; // Extracting memberId from URI query parameters
+        sessions.put(memberId, session);
+        System.out.println("WebSocket connection established for MemberId: " + memberId);
     }
 
     @Override
@@ -28,20 +31,22 @@ public class RequestWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        sessions.remove(session);
+        // Remove session on close
+        sessions.values().remove(session);
         System.out.println("WebSocket connection closed with session ID: " + session.getId());
     }
 
-    public void sendNotification(String message) {
-        System.out.println("Sending notification: " + message);
-        for (WebSocketSession session : sessions) {
-            if (session.isOpen()) {
-                try {
-                    session.sendMessage(new TextMessage(message));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+    public void sendNotificationToUser(String memberId, String message) {
+        WebSocketSession session = sessions.get(memberId);
+        if (session != null && session.isOpen()) {
+            try {
+                session.sendMessage(new TextMessage(message));
+                System.out.println("Notification sent to MemberId: " + memberId);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+        } else {
+            System.out.println("No active WebSocket session found for MemberId: " + memberId);
         }
     }
 }
