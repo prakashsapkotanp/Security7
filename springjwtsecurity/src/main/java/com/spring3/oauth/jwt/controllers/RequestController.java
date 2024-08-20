@@ -49,14 +49,24 @@ public class RequestController {
         MemberInfo memberInfo = new MemberInfo();
         return memberInfo;
     }
-    @PostMapping("/fullFillRequest/{requestId}")
-    public String updateRequestTable(@PathVariable Long requestId) {
+    @PostMapping("/fullFillRequest/{requestId}/{userId}")
+    public String updateRequestTable(@PathVariable Long requestId, @PathVariable Long userId) {
         List<Request> request = requestRepository.findByRequesterId(requestId);
-       if(!request.isEmpty()) {
-           request.get(0).setDisabled(false);
-           request.get(0).setTotalPintsDonated(request.get(0).getTotalPintsDonated()-1);
-           requestRepository.save(request.get(0));
-       }
+        System.out.println("method is called here"+request);
+        Long requesterId = request.get(0).getRequester().getId();
+        requestRepository.updatePints(requesterId);
+
+        System.out.println("required Pints decreased" + requesterId);
+       // Request request1 = requestService.getrequestby
+        for( int i = 0; i < request.size(); i++ ) {
+            Long UserId = request.get(i).getDonorInfo().getId();//actually userId napathaye ni hunxa kina ki
+            if(userId.equals(userId)) {                         // kinaki requestId pathaudai xu
+                request.get(i).setDisabled(false);
+            }
+            request.get(0).setTotalPintsDonated(request.get(0).getTotalPintsDonated() - 1);
+            requestRepository.save(request.get(0));
+        }
+
         return "success";
     }
 
