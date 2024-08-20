@@ -63,8 +63,9 @@ public class RequestController {
             if(userId.equals(userId)) {                         // kinaki requestId pathaudai xu
                 request.get(i).setDisabled(false);
             }
-            request.get(0).setTotalPintsDonated(request.get(0).getTotalPintsDonated() - 1);
-            requestRepository.save(request.get(0));
+            if(request.get(i).getTotalPintsDonated() >= 1){
+            request.get(i).setTotalPintsDonated(request.get(i).getTotalPintsDonated() - 1);
+            requestRepository.save(request.get(i));}
         }
 
         return "success";

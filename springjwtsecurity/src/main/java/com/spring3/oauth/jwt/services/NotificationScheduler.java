@@ -24,7 +24,7 @@ public class NotificationScheduler {
     @Autowired
     private RequestRepository requestRepository;
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 30000)
     public void sendNotifications() {
         try {
             List<Request> requests = requestRepository.findAll();

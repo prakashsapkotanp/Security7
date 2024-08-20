@@ -84,7 +84,6 @@ public class RequestServiceImpl implements RequestService {
             if (checkRequestFulfilled(request)) {
                 request.setDisabled(true);
             }
-
             requestRepository.save(request);
         }
     }
