@@ -29,9 +29,8 @@ public class Request {
 
     private double currentLatitude;
     private double currentLongitude;
-
     private LocalDateTime createdAt;
-    private boolean disabled = false;
+    private boolean disabled = true;
     private int totalPintsDonated = 0;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "donor_id")

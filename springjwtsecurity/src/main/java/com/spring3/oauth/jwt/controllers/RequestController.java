@@ -55,12 +55,12 @@ public class RequestController {
         System.out.println("method is called here"+request);
         Long requesterId = request.get(0).getRequester().getId();
         requestRepository.updatePints(requesterId);
-
         System.out.println("required Pints decreased" + requesterId);
        // Request request1 = requestService.getrequestby
         for( int i = 0; i < request.size(); i++ ) {
             Long UserId = request.get(i).getDonorInfo().getId();//actually userId napathaye ni hunxa kina ki
-            if(userId.equals(userId)) {                         // kinaki requestId pathaudai xu
+            if(userId.equals(userId)) {
+                System.out.println("setdisabled false hudaixa");
                 request.get(i).setDisabled(false);
             }
             if(request.get(i).getTotalPintsDonated() >= 1){

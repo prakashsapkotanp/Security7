@@ -22,6 +22,70 @@ public class RequesterInfo {
     private double latitude;
     private double longitude;
 
+    public String getBloodGroup() {
+        return bloodGroup;
+    }
+
+    public void setBloodGroup(String bloodGroup) {
+        this.bloodGroup = bloodGroup;
+    }
+
+    public int getPints() {
+        return pints;
+    }
+
+    public void setPints(int pints) {
+        this.pints = pints;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getPhone() {
+        return phone;
+    }
+
+    public void setPhone(double phone) {
+        this.phone = phone;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     private double phone;
     private String name;
   //  @OneToOne(cascade = CascadeType.ALL)
@@ -33,17 +97,6 @@ public class RequesterInfo {
     @JoinColumn(name = "locationID", referencedColumnName = "id")
     private MemberLocation memberLocation;
 
-    public String getBloodGroup(){
-        return bloodGroup;
-    }
-    public double getLatitude(){
-        return latitude;
-    }
-    public double getLongitude(){
-        return longitude;
-    }
-    public int getPints(){
-        return pints;
-    }
+
 
 }
