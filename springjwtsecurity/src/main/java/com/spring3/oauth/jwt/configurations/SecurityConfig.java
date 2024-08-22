@@ -33,7 +33,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .requestMatchers("/api/v1/user/login", "/api/v1/user/signup", "/api/v1/refreshToken","api/requests/getRequestByRequesterId/{requesterId}", "/api/v1/members/{id}","/api/v1/user/getId/{pnone_no}", "/api/v1/requesters/{user_id}","/api/requests/fullFillRequest/{requestId}/{userId}","/api/v1/members/updateLastDonatedDate/{memberId}").permitAll()
+                .requestMatchers("/api/v1/user/login","/api/requests/requesters/{memberId}", "/api/v1/user/signup", "/api/v1/refreshToken","api/requests/getRequestByRequesterId/{requesterId}", "/api/v1/members/{id}","/api/v1/user/getId/{pnone_no}", "/api/v1/requesters/{user_id}","/api/requests/fullFillRequest/{requestId}/{userId}","/api/v1/members/updateLastDonatedDate/{memberId}").permitAll()
 //                .requestMatchers("/api/v1/**").authenticated()
                 .requestMatchers("/api/v1/user/profile","/api/v1/members","api/v1/user/users","api/v1/requesters"
                         , "/api/v1/donor-infos","api/v1/member-locations","/api/v1/members/setUserId/{memberId}/{userId}",

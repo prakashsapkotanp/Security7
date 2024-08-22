@@ -34,6 +34,8 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     @Modifying
     @Query(value = "UPDATE `db_bloodlink`.`tbl_request` SET  total_pints_donated = total_pints_donated - 1 WHERE id =?1 and total_pints_donated >0",nativeQuery = true)
     public void reducePints(Long reqId,Long userId);
+    @Query(value = "select count(id) from  `db_bloodlink`.`tbl_request`  WHERE donor_id =?1",nativeQuery = true)
+    String getRequesterCount(Long memberId);
 //    @Query(value ="UPDATE `db_bloodlink`.`tbl_request` SET `disabled` = b'0' WHERE id = ?1")
 //    public List
 

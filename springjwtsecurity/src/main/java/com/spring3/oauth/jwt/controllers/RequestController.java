@@ -118,6 +118,10 @@ public class RequestController {
         List<Request> requests = requestService.getRequestsByMemberId(memberId);
         return ResponseEntity.ok(requests);
     }
+    @GetMapping("/requesters/{memberId}")
+    public String numberOfRequest(@PathVariable Long memberId){
+    return requestRepository.getRequesterCount(memberId);
+    }
     /**
      * Endpoint to get all requests.
      *
