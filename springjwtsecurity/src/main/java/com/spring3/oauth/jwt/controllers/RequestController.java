@@ -51,23 +51,26 @@ public class RequestController {
     }
     @PostMapping("/fullFillRequest/{requestId}/{userId}")
     public String updateRequestTable(@PathVariable Long requestId, @PathVariable Long userId) {
-        List<Request> request = requestRepository.findByRequesterId(requestId);
-        System.out.println("method is called here"+request);
-        Long requesterId = request.get(0).getRequester().getId();
-        requestRepository.updatePints(requesterId);
-        System.out.println("required Pints decreased" + requesterId);
+        //List<Request> request = requestRepository.findByRequesterId(requestId);
+      //  System.out.println("method is called here"+request);
+       // Long requesterId = request.get(0).getRequester().getId();
+       requestRepository.updateRequestTable(requestId,userId);
+        requestRepository.reducePints(requestId,userId);
+        System.out.println("required Pints decreased" + requestId);
+        //requestRepository.updatePints(requestId);
+        System.out.println("required Pints decreased" + requestId);
        // Request request1 = requestService.getrequestby
-        for( int i = 0; i < request.size(); i++ ) {
-            Long UserId = request.get(i).getDonorInfo().getId();//actually userId napathaye ni hunxa kina ki
-            if(userId.equals(userId)) {
-                System.out.println("setdisabled false hudaixa");
-                request.get(i).setDisabled(false);
-            }
-            if(request.get(i).getTotalPintsDonated() >= 1){
-            request.get(i).setTotalPintsDonated(request.get(i).getTotalPintsDonated() - 1);
-            requestRepository.save(request.get(i));}
-        }
 
+//        for( int i = 0; i < request.size(); i++ ) {
+//            Long UserId = request.get(i).getDonorInfo().getId();//actually userId napathaye ni hunxa kina ki
+//            if(userId.equals(userId)) {
+//                System.out.println("setdisabled false hudaixa");
+//                request.get(i).setDisabled(false);
+//            }
+//            if(request.get(i).getTotalPintsDonated() >= 1){
+//            request.get(i).setTotalPintsDonated(request.get(i).getTotalPintsDonated() - 1);
+//            requestRepository.save(request.get(i));}
+//        }
         return "success";
     }
 
@@ -115,7 +118,6 @@ public class RequestController {
         List<Request> requests = requestService.getRequestsByMemberId(memberId);
         return ResponseEntity.ok(requests);
     }
-
     /**
      * Endpoint to get all requests.
      *
@@ -137,4 +139,5 @@ public class RequestController {
         List<Request> requests = requestService.getSentRequestsByMemberId(memberId);
         return ResponseEntity.ok(requests);
     }
+
 }

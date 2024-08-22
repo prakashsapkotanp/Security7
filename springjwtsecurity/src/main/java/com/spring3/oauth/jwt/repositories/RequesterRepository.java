@@ -20,4 +20,6 @@ public interface RequesterRepository extends JpaRepository<RequesterInfo,Long> {
     List<RequesterInfo> findByName(String name);
     @Query(value = "select MAX(id) from requester where user_id = ?1", nativeQuery = true)
     public String gerRequesterIdByUserId(Long userId);
+
+
 }

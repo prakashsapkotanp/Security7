@@ -26,4 +26,15 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     @Query(value = "select * from tbl_request", nativeQuery = true)
     public List<Request> manualFindAll();
 
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE `db_bloodlink`.`tbl_request` SET `disabled` = b'0', total_pints_donated = total_pints_donated - 1 WHERE id =?1 and total_pints_donated >0",nativeQuery = true)
+    public void updateRequestTable(Long reqId,Long userId);
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE `db_bloodlink`.`tbl_request` SET  total_pints_donated = total_pints_donated - 1 WHERE id =?1 and total_pints_donated >0",nativeQuery = true)
+    public void reducePints(Long reqId,Long userId);
+//    @Query(value ="UPDATE `db_bloodlink`.`tbl_request` SET `disabled` = b'0' WHERE id = ?1")
+//    public List
+
 }
